@@ -3,7 +3,7 @@ from Cliente import Cliente
 from Parking import Parking
 from Plaza import Plaza
 from Vehiculo import Vehiculo
-import math
+
 
 coche1 = Vehiculo(matricula=None, tipo='Turismo')
 coche2 = Vehiculo(matricula='1111B', tipo='Turismo')
@@ -18,8 +18,7 @@ ab1 = Abonado(nombre='Pedro', apellidos='Benito', num_tarjeta=1111, email='pedro
               vehiculo=coche2, plaza=None)
 ab2 = Abonado(nombre='Paco', apellidos='Pérez', num_tarjeta=2222, email='paco@gmail.com', dni='dni2', abono=None,
               vehiculo=moto1, plaza=None)
-pk = Parking(abonados=[ab1, ab2], num_plazas=list(range(1, 100)), clientes=[c1, c2, c3],
-             plazas={Plaza.estado: list(range(1, 100))}, registro_facturas=[])
+pk = Parking(abonados=[ab1, ab2], num_plazas=list(range(1, 41)), clientes=[c1, c2, c3], registro_facturas=[])
 
 menu = 1
 while menu != 0:
@@ -35,7 +34,7 @@ while menu != 0:
             print("0. Para salir")
             menu1 = int(input("Indica desea hacer: "))
             if menu1 == 1:
-                pk.depositar_vehiculo(c1)
+                pk.depositar_vehiculo()
             elif menu1 == 2:
                 pk.retirar_vehiculo()
             elif menu1 == 3:

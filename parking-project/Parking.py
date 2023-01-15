@@ -1,4 +1,4 @@
-import Cliente
+from Cliente import Cliente
 from Abonado import Abonado
 from Abono import Abono
 from Plaza import Plaza
@@ -9,11 +9,11 @@ import random
 
 class Parking:
 
-    def __init__(self, abonados=[], num_plazas=[], clientes=[], plazas={}, registro_facturas=[]):
+    def __init__(self, abonados=[], num_plazas=[], clientes=[], registro_facturas=[]):
         self.__abonados = abonados
         self.__num_plazas = num_plazas
         self.__clientes = clientes
-        self.__plazas = plazas
+        self.__plazas = self.rellenar_plazas()
         self.__registro_facturas = registro_facturas
 
     def __str__(self):
@@ -60,30 +60,44 @@ class Parking:
     def registro_facturas(self, x):
         self.__registro_facturas = x
 
+    def mostrar_plazas(self):
+        for e, p in self.plazas.items():
+            print("Id de la plaza: ", e, ", Estado: ", p)
+
+    def rellenar_plazas(self):
+        plazas = self.num_plazas
+        estado = 'libre'
+        pl = dict()
+        for p in plazas:
+            pl[p] = estado
+        return pl
+
     # MÉTODOS PARA LA ZONA CLIENTE
-    def depositar_vehiculo(self, cliente=None):
-        print(self.plazas)
-        cliente.vehiculo.matricula = input("Introduzca matrícula: ")
-        cliente.vehiculo.tipo = input("Introduzca tipo de vehículo: ")
-        if len(self.num_plazas) < 100:
-            if cliente.vehiculo.tipo == 'Turismo':
-                cliente.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
-                                      fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                      fecha_salida=None)
+    def depositar_vehiculo(self):
+        self.mostrar_plazas()
+        matricula = input("Introduzca matrícula: ")
+        tipo = input("Introduzca tipo de vehículo: ")
+        v1 = Vehiculo(matricula=matricula, tipo=tipo)
+        c1 = Cliente(vehiculo=v1, plaza=None)
+        if len(self.num_plazas) < 41:
+            if c1.vehiculo.tipo == 'Turismo':
+                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
+                                 fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
+                                 fecha_salida=None)
                 self.num_plazas.pop(0)
-                self.plazas['Turismo'].pop(0)
-            elif cliente.vehiculo.tipo == 'Motocicleta':
-                cliente.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
-                                      fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                      fecha_salida=None)
+                self.plazas[c1.plaza.id_plaza] = 'ocupada'
+            elif c1.vehiculo.tipo == 'Motocicleta':
+                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
+                                 fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
+                                 fecha_salida=None)
                 self.num_plazas.pop(0)
-                self.plazas['Motocicleta'].pop(0)
+                self.plazas[c1.plaza.id_plaza] = 'ocupada'
             else:
-                cliente.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
-                                      fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                      fecha_salida=None)
+                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
+                                 fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
+                                 fecha_salida=None)
                 self.num_plazas.pop(0)
-                self.plazas['MR'].pop(0)
+                self.plazas[c1.plaza.id_plaza] = 'ocupada'
         return
 
     # FALTA PINTAR TICKET
@@ -127,8 +141,7 @@ class Parking:
 
     # MÉTODOS PARA LA ZONA ADMINISTRADOR
     def controlar_estado_parking(self):
-        for c, v in self.plazas.items():
-            print(c, v)
+        self.mostrar_plazas()
 
     def facturacion(self, cliente=None):
         factura = 0.0
@@ -261,6 +274,3 @@ class Parking:
         for abonado in self.abonados:
             if month in abonado.abono.caducidad:
                 print(abonado)
-
-
-
