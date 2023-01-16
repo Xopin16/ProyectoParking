@@ -13,7 +13,7 @@ class Parking:
         self.__abonados = abonados
         self.__num_plazas = num_plazas
         self.__clientes = clientes
-        self.__plazas = self.rellenar_plazas1()
+        self.__plazas = self.rellenar_plazas()
         self.__registro_facturas = registro_facturas
 
     def __str__(self):
@@ -66,14 +66,6 @@ class Parking:
 
     def rellenar_plazas(self):
         plazas = self.num_plazas
-        estado = 'libre'
-        pl = dict()
-        for p in plazas:
-            pl[p] = estado
-        return pl
-
-    def rellenar_plazas1(self):
-        plazas = self.num_plazas
         state = 'libre'
         pl = dict()
         for p in plazas:
@@ -83,21 +75,26 @@ class Parking:
                 else:
                     pl[p] = state
         return pl
-    def rellenar_plazas2(self):
-        plazas = self.num_plazas
-        state = 'libre'
-        pl = dict()
+
+    def rellenar_plazas_tipo(self):
+        plazas = {"Turismo": 28, "Motocicleta": 6, "Movilidad reducida": 6}
         for c in self.clientes:
-            for p in plazas:
-                if len(self.clientes) >= len(pl.keys()):
-                    pl[p] = c.plaza.estado
-                else:
-                    pl[p] = state
-        return pl
+            if c.vehiculo.tipo == plazas['Turismo']:
+                plazas['Turismo'] -= 1
+            elif c.vehiculo.tipo == plazas['Motocicleta']:
+                plazas['Motocicleta'] -= 1
+            else:
+                plazas['Movilidad reducida'] -= 1
+        return plazas
+
+    # def mostrar_plazas_tipo(self):
+    #     plazas = self.rellenar_plazas_tipo()
+    #     for k, v in plazas.items():
+    #         print("Tipo de plaza: ", k, "Valor")
 
     # MÉTODOS PARA LA ZONA CLIENTE
     def depositar_vehiculo(self):
-        self.mostrar_plazas()
+        self.mostrar_plazas_tipo()
         matricula = input("Introduzca matrícula: ")
         tipo = input("Introduzca tipo de vehículo: ")
         v1 = Vehiculo(matricula=matricula, tipo=tipo)
@@ -184,6 +181,10 @@ class Parking:
             minutos_diferencia = diferencia.total_seconds() / 60
             factura = minutos_diferencia * 0.12
         return factura
+
+    def consular_abonados(self):
+        for a in self.abonados:
+            print("Tipo de abono: ", a.abono.tipo, ", Cobro total: ", a.abono.factura, "€")
 
     def gestion_abonos(self):
         nombre = input("Introduzca su nombre: ")

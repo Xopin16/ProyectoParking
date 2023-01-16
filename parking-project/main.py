@@ -6,7 +6,7 @@ from Parking import Parking
 from Plaza import Plaza
 from Vehiculo import Vehiculo
 
-coche1 = Vehiculo(matricula=None, tipo='Turismo')
+coche1 = Vehiculo(matricula='1111A', tipo='Turismo')
 coche2 = Vehiculo(matricula='1111B', tipo='Turismo')
 moto1 = Vehiculo(matricula='1111C', tipo='Motocicleta')
 moto2 = Vehiculo(matricula='1111D', tipo='Motocicleta')
@@ -43,11 +43,11 @@ while menu != 0:
             if menu1 == 1:
                 pk.depositar_vehiculo()
             elif menu1 == 2:
-                pk.retirar_vehiculo()
+                pk.retirar_vehiculo(c1)
             elif menu1 == 3:
-                pk.depositar_abonados()
+                pk.depositar_abonados(ab1)
             elif menu1 == 4:
-                pk.retirar_abonados()
+                pk.retirar_abonados(ab1)
             else:
                 print("Saliendo...")
         elif menu == 2:
@@ -60,7 +60,7 @@ while menu != 0:
             if menu2 == 1:
                 pk.controlar_estado_parking()
             elif menu2 == 2:
-                pass
+                pk.consular_abonados()
             elif menu2 == 3:
                 pk.gestion_abonos()
             elif menu2 == 4:
