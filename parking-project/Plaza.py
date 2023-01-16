@@ -3,7 +3,7 @@ from _datetime import datetime
 
 class Plaza:
 
-    def __init__(self, id_plaza, pin, fecha_deposito, fecha_salida, estado = 'libre'):
+    def __init__(self, id_plaza, pin, fecha_deposito, fecha_salida, estado):
         self.__fecha_deposito = fecha_deposito
         self.__fecha_salida = fecha_salida
         self.__id_plaza = id_plaza

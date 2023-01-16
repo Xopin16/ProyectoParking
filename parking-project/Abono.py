@@ -6,7 +6,6 @@ class Abono:
     def __init__(self, tipo, factura, fecha_activacion=datetime, fecha_cancelacion=datetime):
         self.__tipo = tipo
         self.__factura = factura
-        self.__caducidad = fecha_cancelacion-fecha_activacion
         self.__fecha_activacion = fecha_activacion
         self.__fecha_cancelacion = fecha_cancelacion
 
@@ -45,10 +44,3 @@ class Abono:
     def fecha_cancelacion(self, x):
         self.__fecha_cancelacion = x
 
-    @property
-    def caducidad(self):
-        return self.__caducidad
-
-    @caducidad.setter
-    def caducidad(self, x):
-        self.__caducidad = x

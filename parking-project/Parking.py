@@ -59,24 +59,25 @@ class Parking:
     def registro_facturas(self, x):
         self.__registro_facturas = x
 
+    def mostrar_ticket(self, cliente=None):
+        print("---------------------------------------")
+        print("FACTURA")
+        print("---------------------------------------")
+        print("Matricula: ", cliente.vehiculo.matricula)
+        print("Fecha de depósito: ", cliente.plaza.fecha_deposito)
+        print("Identificador de la plaza: ", cliente.plaza.id_plaza)
+        print("Pin: ", cliente.plaza.pin)
+
+    def mostrar_clientes(self):
+        for c in self.clientes:
+            print(c.vehiculo, c.plaza)
+
     def mostrar_plazas(self):
         for e, p in self.plazas.items():
             print("Id de la plaza: ", e, ", Estado: ", p)
 
-    def rellenar_plazas1(self):
-        plazas = self.num_plazas
-        state = 'libre'
-        pl = dict()
-        for p in plazas:
-            for c in self.clientes:
-                if len(self.clientes) >= len(pl.keys()):
-                    pl[p] = c.plaza.estado
-                else:
-                    pl[p] = state
-        return pl
-
     def rellenar_plazas(self):
-        plazas = self.num_plazas
+        plazas = list(range(1, 41))
         state = 'libre'
         cont = 1
         pl = dict()
@@ -88,6 +89,7 @@ class Parking:
                         if c.plaza.id_plaza not in pl.keys():
                             pl[p] = c.plaza.estado
                             cont += 1
+                            self.num_plazas.pop(0)
                             salir = False
             else:
                 pl[cont] = state
@@ -123,64 +125,78 @@ class Parking:
         c1 = Cliente(vehiculo=v1, plaza=None)
         if len(self.num_plazas) < 41:
             if c1.vehiculo.tipo == 'Turismo':
-                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
+                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin=111111,
                                  fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                 fecha_salida=None)
+                                 fecha_salida=None, estado='ocupada')
                 self.num_plazas.pop(0)
                 self.plazas[c1.plaza.id_plaza] = 'ocupada'
                 self.clientes.append(c1)
             elif c1.vehiculo.tipo == 'Motocicleta':
-                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
+                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin=111111,
                                  fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                 fecha_salida=None)
+                                 fecha_salida=None, estado='ocupada')
                 self.num_plazas.pop(0)
                 self.plazas[c1.plaza.id_plaza] = 'ocupada'
                 self.clientes.append(c1)
             else:
-                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
+                c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin=111111,
                                  fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                 fecha_salida=None)
+                                 fecha_salida=None, estado='ocupada')
                 self.num_plazas.pop(0)
                 self.plazas[c1.plaza.id_plaza] = 'ocupada'
                 self.clientes.append(c1)
-        return
+        return self.mostrar_ticket(c1)
 
-    # FALTA PINTAR TICKET
-
-    def retirar_vehiculo(self, cliente=None):
+    def retirar_vehiculo(self):
+        cliente = Cliente(vehiculo=None, plaza=None)
         matricula = input("Introduzca matricula: ")
         id_plaza = int(input("Introduzca id de la plaza: "))
-        pin = input("Introduzca pin: ")
-        if pin == cliente.plaza.pin and id_plaza == cliente.plaza.id_plaza \
-                and matricula == cliente.vehiculo.matricula:
-            if cliente.vehiculo.tipo == 'Turismo':
-                self.num_plazas.insert(0, cliente.plaza.id_plaza)
-                self.plazas['Turismo'].insert(0, cliente.plaza.id_plaza)
-                self.clientes.remove(cliente)
-            elif cliente.vehiculo.tipo == 'Motocicleta':
-                self.num_plazas.insert(0, cliente.plaza.id_plaza)
-                self.plazas['Motocicleta'].insert(0, cliente.plaza.id_plaza)
-                self.clientes.remove(cliente)
-            else:
-                self.num_plazas.insert(0, cliente.plaza.id_plaza)
-                self.plazas['MR'].insert(0, cliente.plaza.id_plaza)
-                self.clientes.remove(cliente)
-        return self.facturacion(cliente)
+        pin = int(input("Introduzca pin: "))
+        for c in self.clientes:
+            if pin == c.plaza.pin and id_plaza == c.plaza.id_plaza \
+                    and matricula == c.vehiculo.matricula:
+                cliente = c
+        if cliente in self.clientes:
+            if pin == cliente.plaza.pin and id_plaza == cliente.plaza.id_plaza \
+                    and matricula == cliente.vehiculo.matricula:
+                if cliente.vehiculo.tipo == 'Turismo':
+                    self.plazas[cliente.plaza.id_plaza] = 'libre'
+                    self.num_plazas.insert(0, cliente.plaza.id_plaza)
+                    self.clientes.remove(cliente)
+                elif cliente.vehiculo.tipo == 'Motocicleta':
+                    self.num_plazas.insert(0, cliente.plaza.id_plaza)
+                    self.plazas['Motocicleta'].insert(0, cliente.plaza.id_plaza)
+                    self.clientes.remove(cliente)
+                else:
+                    self.num_plazas.insert(0, cliente.plaza.id_plaza)
+                    self.plazas['MR'].insert(0, cliente.plaza.id_plaza)
+                    self.clientes.remove(cliente)
+            return self.facturacion(cliente)
+        else:
+            return None
 
-    def depositar_abonados(self, abonado=None):
+    def depositar_abonados(self):
+        abonado = Abonado(None, None, None, None, None, None, None, None)
         matricula = input("Introduzca matricula: ")
         dni = input("Introduzca dni: ")
-        if dni == abonado.dni and matricula == abonado.vehiculo.matricula:
-            abonado.plaza.estado('abono ocupada')
+        for c in self.clientes:
+            if matricula == c.vehiculo.matricula and dni == c.dni:
+                abonado = c
+        if abonado in self.clientes:
+            self.plazas[abonado.plaza.id_plaza] = 'abono ocupada'
         else:
             print("No existe tal abonado")
 
-    def retirar_abonados(self, abonado=None):
+    def retirar_abonados(self):
+        abonado = Abonado(None, None, None, None, None, None, None, None)
         matricula = input("Introduzca matricula: ")
-        id_plaza = input("Introduce dni: ")
-        pin = input("Introduce el pin")
-        if matricula == abonado.vehiculo.matricula and abonado.plaza.id_plaza == id_plaza and abonado.plaza.pin == pin:
-            abonado.plaza.estado('abono libre')
+        id_plaza = int(input("Introduce el id_plaza: "))
+        pin = int(input("Introduce el pin: "))
+        for c in self.clientes:
+            if matricula == c.vehiculo.matricula and id_plaza == c.plaza.id_plaza and pin == c.plaza.pin:
+                abonado = c
+        if abonado in self.clientes:
+            self.plazas[abonado.plaza.id_plaza] = 'abono libre'
         else:
             print("No existe tal abonado")
 
@@ -205,11 +221,12 @@ class Parking:
             diferencia = cliente.plaza.fecha_salida - cliente.plaza.fecha_deposito
             minutos_diferencia = diferencia.total_seconds() / 60
             factura = minutos_diferencia * 0.12
-        return factura
+        return round(factura, 2)
 
     def consular_abonados(self):
-        for a in self.abonados:
-            print("Tipo de abono: ", a.abono.tipo, ", Cobro total: ", a.abono.factura, "€")
+        for a in self.clientes:
+            if isinstance(a, Abonado):
+                print("Tipo de abono: ", a.abono.tipo, ", Cobro total: ", a.abono.factura, "€")
 
     def gestion_abonos(self):
         nombre = input("Introduzca su nombre: ")
@@ -220,14 +237,14 @@ class Parking:
         v1 = Vehiculo(matricula="1111AB", tipo="Turismo")
         ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
                      dni=dni, abono=None, vehiculo=v1, plaza=None)
-        self.abonados.append(ab)
+        self.clientes.append(ab)
         menu_abono = 1
         while menu_abono != 0:
-            menu_abono = input("¿Qué desea hacer?")
             print("1. Alta de abono")
             print("2. Modificar abono")
             print("3. Baja de abono")
             print("Pulsa cualquier 0 para salir")
+            menu_abono = input("¿Qué desea hacer?")
             if menu_abono == 1:
                 ab.plaza = Plaza(id_plaza=self.num_plazas[0], pin=random.randint(100000, 999999)
                                  , fecha_deposito=None, fecha_salida=None)
@@ -316,10 +333,10 @@ class Parking:
                             ab.vehiculo.tipo(input("Indica el tipo de vehículo: "))
 
             else:
-                self.abonados.remove(ab)
+                self.clientes.remove(ab)
 
     def caducidad_abonos(self):
         month = int(input("Introduzca el mes del 1 al 12"))
-        for abonado in self.abonados:
+        for abonado in self.clientes:
             if month in abonado.abono.caducidad:
                 print(abonado)
