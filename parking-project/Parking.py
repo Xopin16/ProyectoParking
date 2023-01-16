@@ -13,7 +13,7 @@ class Parking:
         self.__abonados = abonados
         self.__num_plazas = num_plazas
         self.__clientes = clientes
-        self.__plazas = self.rellenar_plazas()
+        self.__plazas = self.rellenar_plazas1()
         self.__registro_facturas = registro_facturas
 
     def __str__(self):
@@ -70,6 +70,29 @@ class Parking:
         pl = dict()
         for p in plazas:
             pl[p] = estado
+        return pl
+
+    def rellenar_plazas1(self):
+        plazas = self.num_plazas
+        state = 'libre'
+        pl = dict()
+        for p in plazas:
+            for c in self.clientes:
+                if len(self.clientes) >= len(pl.keys()):
+                    pl[p] = c.plaza.estado
+                else:
+                    pl[p] = state
+        return pl
+    def rellenar_plazas2(self):
+        plazas = self.num_plazas
+        state = 'libre'
+        pl = dict()
+        for c in self.clientes:
+            for p in plazas:
+                if len(self.clientes) >= len(pl.keys()):
+                    pl[p] = c.plaza.estado
+                else:
+                    pl[p] = state
         return pl
 
     # MÉTODOS PARA LA ZONA CLIENTE

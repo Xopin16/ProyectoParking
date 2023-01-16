@@ -1,9 +1,10 @@
+from datetime import datetime
+
 from Abonado import Abonado
 from Cliente import Cliente
 from Parking import Parking
 from Plaza import Plaza
 from Vehiculo import Vehiculo
-
 
 coche1 = Vehiculo(matricula=None, tipo='Turismo')
 coche2 = Vehiculo(matricula='1111B', tipo='Turismo')
@@ -11,9 +12,15 @@ moto1 = Vehiculo(matricula='1111C', tipo='Motocicleta')
 moto2 = Vehiculo(matricula='1111D', tipo='Motocicleta')
 mr1 = Vehiculo(matricula='1111E', tipo='Movilidad reducida')
 mr2 = Vehiculo(matricula='1111F', tipo='Movilidad reducida')
-c1 = Cliente(vehiculo=coche1, plaza=None)
-c2 = Cliente(vehiculo=coche2, plaza=None)
-c3 = Cliente(vehiculo=moto1, plaza=None)
+c1 = Cliente(vehiculo=coche1,
+             plaza=Plaza(id_plaza=1, pin=111111, fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
+                         fecha_salida=datetime.now(), estado='ocupado'))
+c2 = Cliente(vehiculo=coche2,
+             plaza=Plaza(id_plaza=2, pin=111112, fecha_deposito=datetime(2022, 12, 2, 10, 15, 00, 00000),
+                         fecha_salida=datetime.now(), estado='ocupado'))
+c3 = Cliente(vehiculo=moto1,
+             plaza=Plaza(id_plaza=3, pin=111113, fecha_deposito=datetime(2022, 12, 3, 10, 15, 00, 00000),
+                         fecha_salida=datetime.now(), estado='ocupado'))
 ab1 = Abonado(nombre='Pedro', apellidos='Benito', num_tarjeta=1111, email='pedro@gmail.com', dni='dni1', abono=None,
               vehiculo=coche2, plaza=None)
 ab2 = Abonado(nombre='Paco', apellidos='Pérez', num_tarjeta=2222, email='paco@gmail.com', dni='dni2', abono=None,
@@ -60,5 +67,3 @@ while menu != 0:
                 pk.caducidad_abonos()
             else:
                 print("Saliendo...")
-
-
