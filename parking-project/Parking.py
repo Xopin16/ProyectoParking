@@ -9,24 +9,23 @@ import random
 
 class Parking:
 
-    def __init__(self, abonados=[], num_plazas=[], clientes=[], registro_facturas=[]):
-        self.__abonados = abonados
+    def __init__(self, num_plazas=[], clientes=[], registro_facturas=[]):
         self.__num_plazas = num_plazas
         self.__clientes = clientes
         self.__plazas = self.rellenar_plazas()
         self.__registro_facturas = registro_facturas
 
     def __str__(self):
-        return '{} {} {} {} {}'.format(self.abonados, self.num_plazas, self.clientes, self.plazas,
-                                       self.registro_facturas)
+        return '{} {} {} {}'.format(self.num_plazas, self.clientes, self.plazas,
+                                    self.registro_facturas)
 
-    @property
-    def abonados(self):
-        return self.__abonados
-
-    @abonados.setter
-    def abonados(self, x):
-        self.__abonados = x
+    # @property
+    # def abonados(self):
+    #     return self.__abonados
+    #
+    # @abonados.setter
+    # def abonados(self, x):
+    #     self.__abonados = x
 
     @property
     def num_plazas(self):
@@ -64,7 +63,7 @@ class Parking:
         for e, p in self.plazas.items():
             print("Id de la plaza: ", e, ", Estado: ", p)
 
-    def rellenar_plazas(self):
+    def rellenar_plazas1(self):
         plazas = self.num_plazas
         state = 'libre'
         pl = dict()
@@ -76,21 +75,44 @@ class Parking:
                     pl[p] = state
         return pl
 
+    def rellenar_plazas(self):
+        plazas = self.num_plazas
+        state = 'libre'
+        cont = 1
+        pl = dict()
+        for p in plazas:
+            if len(self.clientes) > len(pl):
+                salir = True
+                for c in self.clientes:
+                    while salir and c.plaza.id_plaza not in pl.keys():
+                        if c.plaza.id_plaza not in pl.keys():
+                            pl[p] = c.plaza.estado
+                            cont += 1
+                            salir = False
+            else:
+                pl[cont] = state
+                cont += 1
+        return pl
+
     def rellenar_plazas_tipo(self):
-        plazas = {"Turismo": 28, "Motocicleta": 6, "Movilidad reducida": 6}
+        tipos = ["Turismo", "Motocicleta", "Movilidad reducida"]
+        n_plazas = [28, 6, 6]
+        plazas = dict(zip(tipos, n_plazas))
+        # plazas = {"Turismo": 28, "Motocicleta": 6, "Movilidad reducida": 6}
+        # tipos = plazas.values()
         for c in self.clientes:
-            if c.vehiculo.tipo == plazas['Turismo']:
+            if c.vehiculo.tipo == tipos[0]:
                 plazas['Turismo'] -= 1
-            elif c.vehiculo.tipo == plazas['Motocicleta']:
+            elif c.vehiculo.tipo == tipos[1]:
                 plazas['Motocicleta'] -= 1
             else:
                 plazas['Movilidad reducida'] -= 1
         return plazas
 
-    # def mostrar_plazas_tipo(self):
-    #     plazas = self.rellenar_plazas_tipo()
-    #     for k, v in plazas.items():
-    #         print("Tipo de plaza: ", k, "Valor")
+    def mostrar_plazas_tipo(self):
+        plazas = self.rellenar_plazas_tipo()
+        for k, v in plazas.items():
+            print("Tipo de plaza: ", k, "| Numero de plazas", v)
 
     # MÉTODOS PARA LA ZONA CLIENTE
     def depositar_vehiculo(self):
@@ -106,18 +128,21 @@ class Parking:
                                  fecha_salida=None)
                 self.num_plazas.pop(0)
                 self.plazas[c1.plaza.id_plaza] = 'ocupada'
+                self.clientes.append(c1)
             elif c1.vehiculo.tipo == 'Motocicleta':
                 c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
                                  fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
                                  fecha_salida=None)
                 self.num_plazas.pop(0)
                 self.plazas[c1.plaza.id_plaza] = 'ocupada'
+                self.clientes.append(c1)
             else:
                 c1.plaza = Plaza(id_plaza=self.num_plazas[0], pin='111111',
                                  fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
                                  fecha_salida=None)
                 self.num_plazas.pop(0)
                 self.plazas[c1.plaza.id_plaza] = 'ocupada'
+                self.clientes.append(c1)
         return
 
     # FALTA PINTAR TICKET

@@ -14,18 +14,21 @@ mr1 = Vehiculo(matricula='1111E', tipo='Movilidad reducida')
 mr2 = Vehiculo(matricula='1111F', tipo='Movilidad reducida')
 c1 = Cliente(vehiculo=coche1,
              plaza=Plaza(id_plaza=1, pin=111111, fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                         fecha_salida=datetime.now(), estado='ocupado'))
+                         fecha_salida=datetime.now(), estado='ocupada'))
 c2 = Cliente(vehiculo=coche2,
              plaza=Plaza(id_plaza=2, pin=111112, fecha_deposito=datetime(2022, 12, 2, 10, 15, 00, 00000),
-                         fecha_salida=datetime.now(), estado='ocupado'))
+                         fecha_salida=datetime.now(), estado='ocupada'))
 c3 = Cliente(vehiculo=moto1,
              plaza=Plaza(id_plaza=3, pin=111113, fecha_deposito=datetime(2022, 12, 3, 10, 15, 00, 00000),
-                         fecha_salida=datetime.now(), estado='ocupado'))
+                         fecha_salida=datetime.now(), estado='ocupada'))
 ab1 = Abonado(nombre='Pedro', apellidos='Benito', num_tarjeta=1111, email='pedro@gmail.com', dni='dni1', abono=None,
-              vehiculo=coche2, plaza=None)
+              vehiculo=moto2,
+              plaza=Plaza(id_plaza=4, pin=211111, fecha_deposito=datetime(2022, 12, 4, 10, 15, 00, 00000),
+                          fecha_salida=datetime.now(), estado='abono ocupada'))
 ab2 = Abonado(nombre='Paco', apellidos='Pérez', num_tarjeta=2222, email='paco@gmail.com', dni='dni2', abono=None,
-              vehiculo=moto1, plaza=None)
-pk = Parking(abonados=[ab1, ab2], num_plazas=list(range(1, 41)), clientes=[c1, c2, c3], registro_facturas=[])
+              vehiculo=mr1, plaza=Plaza(id_plaza=5, pin=211112, fecha_deposito=datetime(2022, 12, 5, 10, 15, 00, 00000),
+                                        fecha_salida=datetime.now(), estado='abono ocupada'))
+pk = Parking(num_plazas=list(range(1, 41)), clientes=[c1, c2, c3, ab1, ab2], registro_facturas=[])
 
 menu = 1
 while menu != 0:
