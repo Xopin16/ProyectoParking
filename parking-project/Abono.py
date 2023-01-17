@@ -10,7 +10,7 @@ class Abono:
         self.__fecha_cancelacion = fecha_cancelacion
 
     def __str__(self):
-        return '{} {} {}'.format(self.tipo, self.factura, self.caducidad, self.fecha_activacion, self.fecha_cancelacion)
+        return '{} {} {} {}'.format(self.tipo, self.factura, self.fecha_activacion, self.fecha_cancelacion)
 
     @property
     def tipo(self):

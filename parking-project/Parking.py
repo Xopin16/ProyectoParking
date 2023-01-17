@@ -244,52 +244,53 @@ class Parking:
                 print("Tipo de abono: ", a.abono.tipo, ", Cobro total: ", a.abono.factura, "€")
 
     def gestion_abonos(self):
-        nombre = input("Introduzca su nombre: ")
-        apellidos = input("Introduzca su apellido: ")
-        num_tarjeta = input("Introduzca su número de tarjeta: ")
-        email = input("Introduzca su email: ")
-        dni = input("Introduzca su dni")
-        v1 = Vehiculo(matricula="1111AB", tipo="Turismo")
-        ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
-                     dni=dni, abono=None, vehiculo=v1, plaza=None)
-        self.clientes.append(ab)
         menu_abono = 1
         while menu_abono != 0:
             print("1. Alta de abono")
             print("2. Modificar abono")
             print("3. Baja de abono")
             print("Pulsa cualquier 0 para salir")
-            menu_abono = input("¿Qué desea hacer?")
+            menu_abono = int(input("¿Qué desea hacer?"))
             if menu_abono == 1:
-                ab.plaza = Plaza(id_plaza=self.num_plazas[0], pin=random.randint(100000, 999999)
-                                 , fecha_deposito=None, fecha_salida=None)
+                nombre = input("Introduzca su nombre: ")
+                apellidos = input("Introduzca su apellido: ")
+                num_tarjeta = input("Introduzca su número de tarjeta: ")
+                email = input("Introduzca su email: ")
+                dni = input("Introduzca su dni")
+                v1 = Vehiculo(matricula="1111AB", tipo="Turismo")
+                ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
+                             dni=dni, abono=None, vehiculo=v1, plaza=None)
+                self.clientes.append(ab)
                 self.num_plazas.pop(0)
-                tipo_abono = input("Elija el tipo de abono")
-                print("1. Mensual(25€)")
-                print("2. Trimestral(75€)")
-                print("3. Semestral(130€)")
-                print("4. Anual(200€)")
-                if tipo_abono == 1:
-                    fecha_activacion = datetime.now()
-                    fecha_cancelacion = datetime.now() + timedelta(days=30)
-                    ab.abono = Abono(tipo=tipo_abono, factura=25, fecha_activacion=fecha_activacion,
-                                     fecha_cancelacion=fecha_cancelacion)
-                elif tipo_abono == 2:
-                    fecha_activacion = datetime.now()
-                    fecha_cancelacion = datetime.now() + timedelta(days=90)
-                    ab.abono = Abono(tipo=tipo_abono, factura=75, fecha_activacion=fecha_activacion,
-                                     fecha_cancelacion=fecha_cancelacion)
-                elif tipo_abono == 3:
-                    fecha_activacion = datetime.now()
-                    fecha_cancelacion = datetime.now() + timedelta(days=180)
-                    ab.abono = Abono(tipo=tipo_abono, factura=130, fecha_activacion=fecha_activacion,
-                                     fecha_cancelacion=fecha_cancelacion)
-                else:
-                    fecha_activacion = datetime.now()
-                    fecha_cancelacion = datetime.now() + timedelta(days=365)
-                    ab.abono = Abono(tipo=tipo_abono, factura=200, fecha_activacion=fecha_activacion,
-                                     fecha_cancelacion=fecha_cancelacion)
-                print(ab)
+                tipo_abono = 1
+                while tipo_abono != 0:
+                    print("1. Mensual(25€)")
+                    print("2. Trimestral(75€)")
+                    print("3. Semestral(130€)")
+                    print("4. Anual(200€)")
+                    print("0. Para salir")
+                    tipo_abono = int(input("Elija el tipo de abono"))
+                    if tipo_abono == 1:
+                        fecha_activacion = datetime.now()
+                        fecha_cancelacion = datetime.now() + timedelta(days=30)
+                        ab.abono = Abono(tipo=tipo_abono, factura=25, fecha_activacion=fecha_activacion,
+                                         fecha_cancelacion=fecha_cancelacion)
+                    elif tipo_abono == 2:
+                        fecha_activacion = datetime.now()
+                        fecha_cancelacion = datetime.now() + timedelta(days=90)
+                        ab.abono = Abono(tipo=tipo_abono, factura=75, fecha_activacion=fecha_activacion,
+                                         fecha_cancelacion=fecha_cancelacion)
+                    elif tipo_abono == 3:
+                        fecha_activacion = datetime.now()
+                        fecha_cancelacion = datetime.now() + timedelta(days=180)
+                        ab.abono = Abono(tipo=tipo_abono, factura=130, fecha_activacion=fecha_activacion,
+                                         fecha_cancelacion=fecha_cancelacion)
+                    else:
+                        fecha_activacion = datetime.now()
+                        fecha_cancelacion = datetime.now() + timedelta(days=365)
+                        ab.abono = Abono(tipo=tipo_abono, factura=200, fecha_activacion=fecha_activacion,
+                                         fecha_cancelacion=fecha_cancelacion)
+                    print(ab)
             elif menu_abono == 2:
                 cambio = input("¿Que desea modificar? 1. Tipo de abono, 2.Datos Personales")
                 if cambio == 1:
@@ -340,7 +341,9 @@ class Parking:
                             ab.vehiculo.tipo(input("Indica el tipo de vehículo: "))
 
             else:
-                self.clientes.remove(ab)
+                # self.num_plazas.pop(0)
+                # self.clientes.remove(ab)
+                pass
 
     def caducidad_abonos(self):
         # CONSULTAR MES.
@@ -350,7 +353,12 @@ class Parking:
                 print(a.abono)
 
         # CONSULTAR ÚLTIMOS 10 DÍAS.
-        pass
+        hoy = datetime.now()
+        ultimos_dias = datetime.now() + timedelta(days=10)
+        for a in self.clientes:
+            if isinstance(a, Abonado) and hoy < a.abono.fecha_cancelacion < ultimos_dias:
+                print(a.abono)
+
 
 
 
