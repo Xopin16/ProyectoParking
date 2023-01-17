@@ -9,7 +9,7 @@ import random
 
 class Parking:
 
-    def __init__(self, num_plazas=[], clientes=[], registro_facturas=[]):
+    def __init__(self, num_plazas=[], clientes=[], registro_facturas={}):
         self.__num_plazas = num_plazas
         self.__clientes = clientes
         self.__plazas = self.rellenar_plazas()
@@ -96,12 +96,17 @@ class Parking:
                 cont += 1
         return pl
 
+    def rellenar_registro(self):
+        pass
+
+    def mostrar_registro(self):
+        for k, v in self.registro_facturas.items():
+            print("Fecha: ", k, ", Cobro: ", v, "€")
+
     def rellenar_plazas_tipo(self):
         tipos = ["Turismo", "Motocicleta", "Movilidad reducida"]
         n_plazas = [28, 6, 6]
         plazas = dict(zip(tipos, n_plazas))
-        # plazas = {"Turismo": 28, "Motocicleta": 6, "Movilidad reducida": 6}
-        # tipos = plazas.values()
         for c in self.clientes:
             if c.vehiculo.tipo == tipos[0]:
                 plazas['Turismo'] -= 1
@@ -171,12 +176,13 @@ class Parking:
                     self.num_plazas.insert(0, cliente.plaza.id_plaza)
                     self.plazas['MR'].insert(0, cliente.plaza.id_plaza)
                     self.clientes.remove(cliente)
-            return self.facturacion(cliente)
+            self.registro_facturas[cliente.plaza.fecha_salida] = self.cobrar(cliente)
+            return self.cobrar(cliente)
         else:
             return None
 
     def depositar_abonados(self):
-        abonado = Abonado(None, None, None, None, None, None, None, None)
+        global abonado
         matricula = input("Introduzca matricula: ")
         dni = input("Introduzca dni: ")
         for c in self.clientes:
@@ -188,7 +194,7 @@ class Parking:
             print("No existe tal abonado")
 
     def retirar_abonados(self):
-        abonado = Abonado(None, None, None, None, None, None, None, None)
+        global abonado
         matricula = input("Introduzca matricula: ")
         id_plaza = int(input("Introduce el id_plaza: "))
         pin = int(input("Introduce el pin: "))
@@ -204,7 +210,7 @@ class Parking:
     def controlar_estado_parking(self):
         self.mostrar_plazas()
 
-    def facturacion(self, cliente=None):
+    def cobrar(self, cliente=None):
         factura = 0.0
         if cliente.vehiculo.tipo == 'Turismo':
             cliente.plaza.fecha_salida = datetime.now()
@@ -222,6 +228,15 @@ class Parking:
             minutos_diferencia = diferencia.total_seconds() / 60
             factura = minutos_diferencia * 0.12
         return round(factura, 2)
+
+    def mostrar_facturacion(self):
+        print("Indique la primera fecha: ")
+        fecha1 = datetime(int(input("Año: ")), int(input("Mes: ")), int(input("Dia: ")), int(input("Hora: ")))
+        print("Indique la segunda fecha: ")
+        fecha2 = datetime(int(input("Año: ")), int(input("Mes: ")), int(input("Dia: ")), int(input("Hora: ")))
+        for k, v in self.registro_facturas.items():
+            if fecha1 < k < fecha2:
+                print("Fecha: ", k, "Cobro: ", v, "€")
 
     def consular_abonados(self):
         for a in self.clientes:
@@ -259,25 +274,21 @@ class Parking:
                     fecha_cancelacion = datetime.now() + timedelta(days=30)
                     ab.abono = Abono(tipo=tipo_abono, factura=25, fecha_activacion=fecha_activacion,
                                      fecha_cancelacion=fecha_cancelacion)
-                    self.registro_facturas.append(ab.abono.factura)
                 elif tipo_abono == 2:
                     fecha_activacion = datetime.now()
                     fecha_cancelacion = datetime.now() + timedelta(days=90)
                     ab.abono = Abono(tipo=tipo_abono, factura=75, fecha_activacion=fecha_activacion,
                                      fecha_cancelacion=fecha_cancelacion)
-                    self.registro_facturas.append(ab.abono.factura)
                 elif tipo_abono == 3:
                     fecha_activacion = datetime.now()
                     fecha_cancelacion = datetime.now() + timedelta(days=180)
                     ab.abono = Abono(tipo=tipo_abono, factura=130, fecha_activacion=fecha_activacion,
                                      fecha_cancelacion=fecha_cancelacion)
-                    self.registro_facturas.append(ab.abono.factura)
                 else:
                     fecha_activacion = datetime.now()
                     fecha_cancelacion = datetime.now() + timedelta(days=365)
                     ab.abono = Abono(tipo=tipo_abono, factura=200, fecha_activacion=fecha_activacion,
                                      fecha_cancelacion=fecha_cancelacion)
-                    self.registro_facturas.append(ab.abono.factura)
                 print(ab)
             elif menu_abono == 2:
                 cambio = input("¿Que desea modificar? 1. Tipo de abono, 2.Datos Personales")
@@ -293,28 +304,24 @@ class Parking:
                         ab.abono.tipo(new_tipo)
                         ab.abono.fecha_activacion(fecha_activacion)
                         ab.abono.fecha_cancelacion(fecha_cancelacion)
-                        self.registro_facturas.append(ab.abono.factura(25))
                     elif new_tipo == 2:
                         fecha_activacion = datetime.now()
                         fecha_cancelacion = datetime.now() + timedelta(days=90)
                         ab.abono.tipo(new_tipo)
                         ab.abono.fecha_activacion(fecha_activacion)
                         ab.abono.fecha_cancelacion(fecha_cancelacion)
-                        self.registro_facturas.append(ab.abono.factura(75))
                     elif new_tipo == 3:
                         fecha_activacion = datetime.now()
                         fecha_cancelacion = datetime.now() + timedelta(days=180)
                         ab.abono.tipo(new_tipo)
                         ab.abono.fecha_activacion(fecha_activacion)
                         ab.abono.fecha_cancelacion(fecha_cancelacion)
-                        self.registro_facturas.append(ab.abono.factura(130))
                     else:
                         fecha_activacion = datetime.now()
                         fecha_cancelacion = datetime.now() + timedelta(days=365)
                         ab.abono.tipo(new_tipo)
                         ab.abono.fecha_activacion(fecha_activacion)
                         ab.abono.fecha_cancelacion(fecha_cancelacion)
-                        self.registro_facturas.append(ab.abono.factura(200))
                 else:
                     datos = input("1.Nombre, 2.Apellidos, 3.Numero de tarjeta, 4.Email, 5.Vehiculo")
                     if datos == 1:
@@ -336,7 +343,14 @@ class Parking:
                 self.clientes.remove(ab)
 
     def caducidad_abonos(self):
-        month = int(input("Introduzca el mes del 1 al 12"))
-        for abonado in self.clientes:
-            if month in abonado.abono.caducidad:
-                print(abonado)
+        # CONSULTAR MES.
+        mes = int(input("Pof favor indica el mes que desea consultar: "))
+        for a in self.clientes:
+            if isinstance(a, Abonado) and mes == a.abono.fecha_cancelacion.month():
+                print(a.abono)
+
+        # CONSULTAR ÚLTIMOS 10 DÍAS.
+        pass
+
+
+

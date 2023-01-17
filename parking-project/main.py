@@ -32,7 +32,7 @@ ab2 = Abonado(nombre='Paco', apellidos='Pérez', num_tarjeta=2222, email='paco@g
                           fecha_cancelacion=None),
               vehiculo=mr1, plaza=Plaza(id_plaza=5, pin=211112, fecha_deposito=datetime(2023, 1, 1, 10, 15, 00, 00000),
                                         fecha_salida=datetime.now(), estado='abono ocupada'))
-pk = Parking(num_plazas=list(range(1, 41)), clientes=[c1, c2, c3, ab1, ab2], registro_facturas=[])
+pk = Parking(num_plazas=list(range(1, 41)), clientes=[c1, c2, c3, ab1, ab2], registro_facturas={})
 
 menu = 1
 while menu != 0:
@@ -62,19 +62,23 @@ while menu != 0:
             else:
                 print("Saliendo...")
         elif menu == 2:
+            pk.mostrar_registro()
             print("1. Consultar estado parking")
-            print("2. Consultar abonos")
-            print("3. Gestionar abonos")
-            print("4. Consultar caducidad de abonos")
+            print("2. Mostrar registro de facturas")
+            print("3. Consultar abonos")
+            print("4. Gestionar abonos")
+            print("5. Consultar caducidad de abonos")
             print("0. Para salir")
             menu2 = int(input("Indica que desea hacer: "))
             if menu2 == 1:
                 pk.controlar_estado_parking()
             elif menu2 == 2:
-                pk.consular_abonados()
+                pk.mostrar_facturacion()
             elif menu2 == 3:
-                pk.gestion_abonos()
+                pk.consular_abonados()
             elif menu2 == 4:
+                pk.gestion_abonos()
+            elif menu2 == 5:
                 pk.caducidad_abonos()
             else:
                 print("Saliendo...")
