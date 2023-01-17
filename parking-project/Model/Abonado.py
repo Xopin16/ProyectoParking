@@ -1,4 +1,4 @@
-from Cliente import Cliente
+from Model.Cliente import Cliente
 
 
 class Abonado(Cliente):

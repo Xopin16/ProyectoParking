@@ -1,12 +1,12 @@
-from datetime import datetime
+from Service.ParkingService import *
+from Model.Abonado import Abonado
+from Model.Abono import Abono
+from Model.Cliente import Cliente
+from Model.Parking import Parking
+from Model.Plaza import Plaza
+from Model.Vehiculo import Vehiculo
 
-from Abonado import Abonado
-from Abono import Abono
-from Cliente import Cliente
-from Parking import Parking
-from Plaza import Plaza
-from Vehiculo import Vehiculo
-
+ParkingService = ParkingService()
 coche1 = Vehiculo(matricula='1111A', tipo='Turismo')
 coche2 = Vehiculo(matricula='1111B', tipo='Turismo')
 moto1 = Vehiculo(matricula='1111C', tipo='Motocicleta')
@@ -49,13 +49,14 @@ while menu != 0:
             print("0. Para salir")
             menu1 = int(input("Indica desea hacer: "))
             if menu1 == 1:
-                pk.depositar_vehiculo()
+                ParkingService.depositar_vehiculo(pk)
             elif menu1 == 2:
-                print("Su vehículo ha sido retirado correctamente, se le cobrará ", pk.retirar_vehiculo(), '€')
+                print("Su vehículo ha sido retirado correctamente, se le cobrará ",
+                      ParkingService.retirar_vehiculo(pk), '€')
             elif menu1 == 3:
-                pk.depositar_abonados()
+                ParkingService.depositar_abonados(pk)
             elif menu1 == 4:
-                pk.retirar_abonados()
+                ParkingService.retirar_abonados(pk)
             else:
                 print("Saliendo...")
         elif menu == 2:
@@ -68,14 +69,14 @@ while menu != 0:
             print("0. Para salir")
             menu2 = int(input("Indica que desea hacer: "))
             if menu2 == 1:
-                pk.controlar_estado_parking()
+                ParkingService.controlar_estado_parking(pk)
             elif menu2 == 2:
-                pk.mostrar_facturacion()
+                ParkingService.mostrar_facturacion(pk)
             elif menu2 == 3:
-                pk.consular_abonados()
+                ParkingService.consular_abonados(pk)
             elif menu2 == 4:
-                pk.gestion_abonos()
+                ParkingService.gestion_abonos(pk)
             elif menu2 == 5:
-                pk.caducidad_abonos()
+                ParkingService.caducidad_abonos(pk)
             else:
                 print("Saliendo...")
