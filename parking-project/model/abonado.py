@@ -3,8 +3,8 @@ from model.cliente import Cliente
 
 class Abonado(Cliente):
 
-    def __init__(self, nombre, apellidos, num_tarjeta, email, dni, abono, vehiculo, plaza):
-        super().__init__(vehiculo, plaza)
+    def __init__(self, nombre, apellidos, num_tarjeta, email, dni, abono, vehiculo, plaza, pin):
+        super().__init__(vehiculo, plaza, pin)
         self.__nombre = nombre
         self.__apellidos = apellidos
         self.__num_tarjeta = num_tarjeta
@@ -13,8 +13,8 @@ class Abonado(Cliente):
         self.__abono = abono
 
     def __str__(self):
-        return '{} {} {} {} {} {} {}'.format(self.nombre, self.apellidos, self.num_tarjeta, self.email, self.dni,
-                                             self.abono, self.vehiculo, self.plaza.__str__())
+        return '{} {} {} {} {} {} {} {} {}'.format(self.nombre, self.apellidos, self.num_tarjeta, self.email, self.dni,
+                                             self.abono, self.vehiculo, self.plaza.__str__(), self.pin)
 
     @property
     def nombre(self):

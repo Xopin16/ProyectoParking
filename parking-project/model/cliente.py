@@ -3,12 +3,13 @@ import pickle
 
 class Cliente:
 
-    def __init__(self, vehiculo, plaza):
+    def __init__(self, vehiculo, plaza, pin):
         self.__vehiculo = vehiculo
         self.__plaza = plaza
+        self.__pin = pin
 
     def __str__(self):
-        return '{} {}'.format(self.vehiculo, self.plaza)
+        return '{} {} {}'.format(self.vehiculo, self.plaza, self.pin)
 
     @property
     def vehiculo(self):
@@ -25,6 +26,14 @@ class Cliente:
     @plaza.setter
     def plaza(self, valor):
         self.__plaza = valor
+
+    @property
+    def pin(self):
+        return self.__pin
+
+    @pin.setter
+    def pin(self, valor):
+        self.__pin = valor
 
     def guardar_cliente(self, lista):
         lista.append(self)

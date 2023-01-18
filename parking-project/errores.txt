@@ -1,0 +1,15 @@
+1. Corregir forma de generar id_plaza. /HECHO
+2. Arreglar main de retirar vehiculo. /HECHO
+3. Arreglar while de main y gestion abono. /TODO
+4. Corregir facturas_registro de pickle /HECHO
+5. Agregar más vistas. /HECHO
+6. Corregir la clase plaza quitando las dos fechas. /HECHO
+7. Dividir ParkingService en ZonaAdmin y ZonaCliente /HECHO
+8. Evitar chapuzas. /TODO
+9. Arreglar estado plaza. /HECHO
+10. Arreglar pisado de pickle. /TODO
+11. Exepciones. /TODO
+12. Testing. /TODO
+13. Agregar comprobaciones. /TODO
+14. Modificar cobro. /HECHO
+15. Modificar consultar abonos. /TODO

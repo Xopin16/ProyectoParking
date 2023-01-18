@@ -1,5 +1,5 @@
-from model import cliente
-from service.parking_service import *
+from service.cliente_service import *
+from service.admin_service import *
 from view.view import *
 from model.abonado import Abonado
 import pickle
@@ -9,17 +9,14 @@ from model.parking import Parking
 from model.plaza import Plaza
 from model.vehiculo import Vehiculo
 
-ParkingService = ParkingService()
+ClienteService = ClienteService()
+AdminService = AdminService()
 
-plaza1 = Plaza(id_plaza=1, pin=111111, fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-               fecha_salida=datetime.now(), estado='ocupada')
-plaza2 = Plaza(id_plaza=2, pin=111112, fecha_deposito=datetime(2022, 12, 2, 10, 15, 00, 00000),
-               fecha_salida=datetime.now(), estado='ocupada')
-plaza3 = Plaza(id_plaza=3, pin=111113, fecha_deposito=datetime(2022, 12, 3, 10, 15, 00, 00000),
-               fecha_salida=datetime.now(), estado='ocupada')
-plaza4 = Plaza(id_plaza=4, pin=211111, fecha_deposito=None,
-               fecha_salida=None, estado='abono ocupada')
-plaza5 = Plaza(id_plaza=5, pin=211112, fecha_deposito=None, fecha_salida=None, estado='abono ocupada')
+plaza1 = Plaza(id_plaza=1, estado='ocupada', fecha_deposito=datetime(2023, 1, 1, 10, 15, 00, 00000))
+plaza2 = Plaza(id_plaza=2, estado='ocupada', fecha_deposito=datetime(2023, 1, 2, 10, 15, 00, 00000))
+plaza3 = Plaza(id_plaza=3, estado='ocupada', fecha_deposito=datetime(2023, 1, 3, 10, 15, 00, 00000))
+plaza4 = Plaza(id_plaza=4, estado='abono ocupada')
+plaza5 = Plaza(id_plaza=5, estado='abono ocupada')
 lista_plazas = [plaza1, plaza2, plaza3, plaza4, plaza5]
 
 v1 = Vehiculo(matricula='1111A', tipo='Turismo')
@@ -29,23 +26,24 @@ v4 = Vehiculo(matricula='1111D', tipo='Motocicleta')
 v5 = Vehiculo(matricula='1111F', tipo='Movilidad reducida')
 lista_vehiculos = [v1, v2, v3, v4, v5]
 
-abono1 = Abono(tipo='Mensual', factura=75, fecha_activacion=datetime(2022, 12, 1, 10, 15, 00, 00000),
-               fecha_cancelacion=datetime(2023, 1, 1, 10, 15, 00, 00000))
-abono2 = Abono(tipo='Anual', factura=200, fecha_activacion=datetime(2022, 1, 1, 10, 15, 00, 00000),
-               fecha_cancelacion=datetime(2023, 1, 1, 10, 15, 00, 00000))
+abono1 = Abono(tipo='Mensual', factura=25, fecha_activacion=datetime(2023, 1, 1, 10, 15, 00, 00000),
+               fecha_cancelacion=datetime(2023, 2, 1, 10, 15, 00, 00000))
+abono2 = Abono(tipo='Anual', factura=200, fecha_activacion=datetime(2023, 1, 1, 10, 15, 00, 00000),
+               fecha_cancelacion=datetime(2024, 1, 1, 10, 15, 00, 00000))
 lista_abonos = [abono1, abono2]
 
-c1 = Cliente(vehiculo=v1, plaza=plaza1)
-c2 = Cliente(vehiculo=v2, plaza=plaza2)
-c3 = Cliente(vehiculo=v3, plaza=plaza3)
+c1 = Cliente(vehiculo=v1, plaza=plaza1, pin=111111)
+c2 = Cliente(vehiculo=v2, plaza=plaza2, pin=111112)
+c3 = Cliente(vehiculo=v3, plaza=plaza3, pin=111113)
 
 ab1 = Abonado(nombre='Pedro', apellidos='Benito', num_tarjeta=1111, email='pedro@gmail.com', dni='dni1',
-              abono=abono1, vehiculo=v4, plaza=plaza4)
+              abono=abono1, vehiculo=v4, plaza=plaza4, pin=211111)
 ab2 = Abonado(nombre='Paco', apellidos='Pérez', num_tarjeta=2222, email='paco@gmail.com', dni='dni2',
-              abono=Abono, vehiculo=v5, plaza=plaza5)
-lista_clientes = [c1, c2, c3, abono1, abono2]
-
-pk = Parking(num_plazas=list(range(1, 41)), clientes=[c1, c2, c3, ab1, ab2], registro_facturas={})
+              abono=abono2, vehiculo=v5, plaza=plaza5, pin=211112)
+lista_clientes = [c1, c2, c3, ab1, ab2]
+lista_cobros_cliente = []
+pk = Parking(plazas_totales=40, clientes=[c1, c2, c3, ab1, ab2], registro_facturas=[])
+pk.rellenar_plazas(lista_plazas)
 
 # ESCRIBIMOS LISTAS
 clientes = open('files/clientes.pckl', 'wb')
@@ -64,9 +62,13 @@ abonos = open('files/abonos.pckl', 'wb')
 pickle.dump(lista_abonos, abonos)
 abonos.close()
 
-facturas_cliente = open('files/facturas_cliente.pckl', 'wb')
-pickle.dump(pk.registro_facturas, facturas_cliente)
-facturas_cliente.close()
+tickets_cliente = open('files/facturas_cliente.pckl', 'wb')
+pickle.dump(pk.registro_facturas, tickets_cliente)
+tickets_cliente.close()
+
+cobros_cliente = open('files/facturas_cliente.pckl', 'wb')
+pickle.dump(lista_cobros_cliente, cobros_cliente)
+cobros_cliente.close()
 
 # LEEMOS LISTAS
 clientes = open('files/clientes.pckl', 'rb')
@@ -85,9 +87,13 @@ abonos = open('files/abonos.pckl', 'rb')
 abonos_list = pickle.load(abonos)
 abonos.close()
 
-facturas_cliente = open('files/facturas_cliente.pckl', 'rb')
-facturas_cliente_list = pickle.load(facturas_cliente)
-facturas_cliente.close()
+tickets_cliente = open('files/facturas_cliente.pckl', 'rb')
+ticekts_cliente_list = pickle.load(tickets_cliente)
+tickets_cliente.close()
+
+cobros_cliente = open('files/facturas_cliente.pckl', 'rb')
+cobros_cliente_list = pickle.load(cobros_cliente)
+cobros_cliente.close()
 
 menu = 1
 while menu != 0:
@@ -96,48 +102,40 @@ while menu != 0:
     menu = int(input("Indica si eres cliente o administrador: "))
     if menu != 0:
         if menu == 1:
-            pk.mostrar_clientes()
+            pk.mostrar_clientes(lista_clientes)
             imprimir_menu_cliente()
             menu1 = int(input("Indica desea hacer: "))
             if menu1 == 1:
-                ##CREAR MATRICULA Y TIPO FUERA DEL MÉTODO PARA CREAR AQUI UN NUEVO CLIENTE
+                pk.mostrar_plazas_tipo(lista_clientes)
                 matricula = input("Introduzca matrícula: ")
                 tipo = input("Introduzca tipo de vehículo: ")
                 new_vehiculo = Vehiculo(matricula=matricula, tipo=tipo)
-                new_vehiculo.guardar_vehiculo(vehiculos)
-                new_vehiculo.cargar_vehiculos()
-                new_plaza = Plaza(id_plaza=pk.num_plazas[0], pin=111111,
-                                  fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                  fecha_salida=None, estado='ocupada')
-                new_plaza.guardar_plaza(plazas)
-                new_plaza.cargar_plazas()
-                new_cliente = Cliente(vehiculo=new_plaza, plaza=new_plaza)
-                new_cliente.guardar_cliente(clientes)
-                new_cliente.cargar_clientes()
-                ParkingService.depositar_vehiculo(pk, lista_vehiculos, new_cliente)
-
+                lista_vehiculos.append(new_vehiculo)
+                new_cliente = Cliente(vehiculo=new_vehiculo, plaza=None, pin=random.randint(100000, 999999))
+                lista_clientes.append(new_cliente)
+                ClienteService.depositar_vehiculo(pk, new_cliente, lista_plazas)
             elif menu1 == 2:
-                print("Su vehículo ha sido retirado correctamente, se le cobrará ",
-                      ParkingService.retirar_vehiculo(pk), '€')
+                ClienteService.retirar_vehiculo(lista_clientes, lista_cobros_cliente)
             elif menu1 == 3:
-                ParkingService.depositar_abonados(pk)
+                ClienteService.depositar_abonados(lista_clientes)
             elif menu1 == 4:
-                ParkingService.retirar_abonados(pk)
+                ClienteService.retirar_abonados(lista_clientes)
             else:
                 print("Saliendo...")
         elif menu == 2:
-            pk.mostrar_registro()
             imprimir_menu_admin()
             menu2 = int(input("Indica que desea hacer: "))
             if menu2 == 1:
-                ParkingService.controlar_estado_parking(pk)
+                AdminService.controlar_estado_parking(pk, lista_plazas)
             elif menu2 == 2:
-                ParkingService.mostrar_facturacion(pk)
+                AdminService.mostrar_facturacion(lista_cobros_cliente)
             elif menu2 == 3:
-                ParkingService.consular_abonados(pk)
+                AdminService.consular_abonados(lista_clientes)
             elif menu2 == 4:
-                ParkingService.gestion_abonos(pk)
+                AdminService.gestion_abonos(lista_clientes, lista_plazas, lista_abonos)
             elif menu2 == 5:
-                ParkingService.caducidad_abonos(pk)
+                AdminService.caducidad_abonos(lista_clientes)
             else:
                 print("Saliendo...")
+        else:
+            print("Saliendo...")

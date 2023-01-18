@@ -3,16 +3,13 @@ import pickle
 
 class Plaza:
 
-    def __init__(self, id_plaza, pin, fecha_deposito, fecha_salida, estado):
-        self.__fecha_deposito = fecha_deposito
-        self.__fecha_salida = fecha_salida
+    def __init__(self, id_plaza, estado, fecha_deposito=None):
         self.__id_plaza = id_plaza
         self.__estado = estado
-        self.__pin = pin
+        self.__fecha_deposito = fecha_deposito
 
     def __str__(self):
-        return '{} {} {} {} {}'.format(self.id_plaza, self.estado, self.pin, self.fecha_deposito,
-                                       self.fecha_salida)
+        return '{} {}'.format(self.id_plaza, self.estado, self.fecha_deposito)
 
     @property
     def id_plaza(self):
@@ -30,13 +27,6 @@ class Plaza:
     def estado(self, x):
         self.__estado = x
 
-    @property
-    def pin(self):
-        return self.__pin
-
-    @pin.setter
-    def pin(self, x):
-        self.__pin = x
 
     @property
     def fecha_deposito(self):
@@ -45,14 +35,6 @@ class Plaza:
     @fecha_deposito.setter
     def fecha_deposito(self, x):
         self.__fecha_deposito = x
-
-    @property
-    def fecha_salida(self):
-        return self.__fecha_salida
-
-    @fecha_salida.setter
-    def fecha_salida(self, x):
-        self.__fecha_salida = x
 
     def guardar_plaza(self, lista):
         lista.append(self)
@@ -65,4 +47,6 @@ class Plaza:
         plazas_list = pickle.load(plazas)
         plazas.close()
         return plazas_list
+
+
 
