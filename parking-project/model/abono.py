@@ -1,4 +1,5 @@
 from _datetime import datetime
+import pickle
 
 
 class Abono:
@@ -43,4 +44,10 @@ class Abono:
     @fecha_cancelacion.setter
     def fecha_cancelacion(self, x):
         self.__fecha_cancelacion = x
+
+    def guardar_abono(self, lista):
+        lista.append(self)
+        abonos = open('files/abonos.pckl', 'wb')
+        pickle.dump(lista, abonos)
+        abonos.close()
 

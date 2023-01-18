@@ -1,3 +1,6 @@
+import pickle
+
+
 class Cliente:
 
     def __init__(self, vehiculo, plaza):
@@ -22,3 +25,15 @@ class Cliente:
     @plaza.setter
     def plaza(self, valor):
         self.__plaza = valor
+
+    def guardar_cliente(self, lista):
+        lista.append(self)
+        clientes = open('files/clientes.pckl', 'wb')
+        pickle.dump(lista, clientes)
+        clientes.close()
+
+    def cargar_clientes(self):
+        clientes = open('files/clientes.pckl', 'rb')
+        clientes_list = pickle.load(clientes)
+        clientes.close()
+        return clientes_list

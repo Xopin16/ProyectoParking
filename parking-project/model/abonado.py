@@ -1,4 +1,4 @@
-from Model.Cliente import Cliente
+from model.cliente import Cliente
 
 
 class Abonado(Cliente):
@@ -63,3 +63,4 @@ class Abonado(Cliente):
     @abono.setter
     def abono(self, valor):
         self.__abono = valor
+

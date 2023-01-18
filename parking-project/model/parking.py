@@ -1,4 +1,5 @@
-from Model.Abonado import Abonado
+from model.abonado import Abonado
+import pickle
 
 
 class Parking:
@@ -56,9 +57,7 @@ class Parking:
 
     def mostrar_clientes(self):
         for c in self.clientes:
-            print(c.vehiculo, c.plaza)
-            if isinstance(c, Abonado):
-                print(c)
+            print(c)
 
     def mostrar_plazas(self, pk):
         for e, p in self.plazas.items():
@@ -105,3 +104,9 @@ class Parking:
         plazas = self.rellenar_plazas_tipo()
         for k, v in plazas.items():
             print("Tipo de plaza: ", k, "| Numero de plazas", v)
+
+    def guardar_factura_cliente(self, lista):
+        lista.append(self)
+        facturas_cliente = open('files/facturas_cliente.pckl', 'wb')
+        pickle.dump(lista, facturas_cliente)
+        facturas_cliente.close()

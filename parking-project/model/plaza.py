@@ -1,4 +1,4 @@
-from _datetime import datetime
+import pickle
 
 
 class Plaza:
@@ -53,3 +53,16 @@ class Plaza:
     @fecha_salida.setter
     def fecha_salida(self, x):
         self.__fecha_salida = x
+
+    def guardar_plaza(self, lista):
+        lista.append(self)
+        plazas = open('files/plazas.pckl', 'wb')
+        pickle.dump(lista, plazas)
+        plazas.close()
+
+    def cargar_plazas(self):
+        plazas = open('files/plazas.pckl', 'rb')
+        plazas_list = pickle.load(plazas)
+        plazas.close()
+        return plazas_list
+

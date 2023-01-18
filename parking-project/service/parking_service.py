@@ -1,46 +1,32 @@
 from datetime import datetime, timedelta
 import random
 
-from Model.Abonado import Abonado
-from Model.Abono import Abono
-from Model.Cliente import Cliente
-from Model.Plaza import Plaza
-from Model.Vehiculo import Vehiculo
+from model.abonado import Abonado
+from model.abono import Abono
+from model.cliente import Cliente
+from model.plaza import Plaza
+from model.vehiculo import Vehiculo
 
 
 class ParkingService:
 
-    def depositar_vehiculo(self, parking=None):
+    def depositar_vehiculo(self, parking=None, cliente=None, lista=None):
         parking.mostrar_plazas_tipo()
-        matricula = input("Introduzca matrícula: ")
-        tipo = input("Introduzca tipo de vehículo: ")
-        v1 = Vehiculo(matricula=matricula, tipo=tipo)
-        c1 = Cliente(vehiculo=v1, plaza=None)
         if len(parking.num_plazas) < 41:
-            if c1.vehiculo.tipo == 'Turismo':
-                c1.plaza = Plaza(id_plaza=parking.num_plazas[0], pin=111111,
-                                 fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                 fecha_salida=None, estado='ocupada')
+            if cliente.vehiculo.tipo == 'Turismo':
                 parking.num_plazas.pop(0)
-                parking.plazas[c1.plaza.id_plaza] = 'ocupada'
-                parking.clientes.append(c1)
-            elif c1.vehiculo.tipo == 'Motocicleta':
-                c1.plaza = Plaza(id_plaza=parking.num_plazas[0], pin=111111,
-                                 fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                 fecha_salida=None, estado='ocupada')
+                parking.plazas[cliente.plaza.id_plaza] = 'ocupada'
+                # parking.clientes.append(c1)
+            elif cliente.vehiculo.tipo == 'Motocicleta':
                 parking.num_plazas.pop(0)
-                parking.plazas[c1.plaza.id_plaza] = 'ocupada'
-                parking.clientes.append(c1)
+                parking.plazas[cliente.plaza.id_plaza] = 'ocupada'
+                # parking.clientes.append(c1)
             else:
-                c1.plaza = Plaza(id_plaza=parking.num_plazas[0], pin=111111,
-                                 fecha_deposito=datetime(2022, 12, 1, 10, 15, 00, 00000),
-                                 fecha_salida=None, estado='ocupada')
                 parking.num_plazas.pop(0)
-                parking.plazas[c1.plaza.id_plaza] = 'ocupada'
-                parking.clientes.append(c1)
-        return parking.mostrar_ticket(c1)
+                parking.plazas[cliente.plaza.id_plaza] = 'ocupada'
+        return parking.mostrar_ticket(cliente)
 
-    def retirar_vehiculo(self, parking=None):
+    def retirar_vehiculo(self, parking=None, lista=None):
         cliente = Cliente(vehiculo=None, plaza=None)
         matricula = input("Introduzca matricula: ")
         id_plaza = int(input("Introduzca id de la plaza: "))
@@ -69,7 +55,7 @@ class ParkingService:
         else:
             return None
 
-    def depositar_abonados(self, parking=None):
+    def depositar_abonados(self, parking=None, lista=None):
         abonado = 0
         matricula = input("Introduzca matricula: ")
         dni = input("Introduzca dni: ")
@@ -82,7 +68,7 @@ class ParkingService:
         else:
             print("No existe tal abonado")
 
-    def retirar_abonados(self, parking=None):
+    def retirar_abonados(self, parking=None, lista=None):
         abonado = 0
         matricula = input("Introduzca matricula: ")
         id_plaza = int(input("Introduce el id_plaza: "))
@@ -96,7 +82,7 @@ class ParkingService:
             print("No existe tal abonado")
 
     # MÉTODOS PARA LA ZONA ADMINISTRADOR
-    def controlar_estado_parking(self, parking=None):
+    def controlar_estado_parking(self, parking=None, lista=None):
         parking.mostrar_plazas()
 
     def cobrar(self, cliente=None):
@@ -118,7 +104,7 @@ class ParkingService:
             factura = minutos_diferencia * 0.12
         return round(factura, 2)
 
-    def mostrar_facturacion(self, parking=None):
+    def mostrar_facturacion(self, parking=None, lista=None):
         print("Indique la primera fecha: ")
         fecha1 = datetime(int(input("Año: ")), int(input("Mes: ")), int(input("Dia: ")), int(input("Hora: ")))
         print("Indique la segunda fecha: ")
@@ -127,12 +113,12 @@ class ParkingService:
             if fecha1 < k < fecha2:
                 print("Fecha: ", k, "Cobro: ", v, "€")
 
-    def consular_abonados(self, parking=None):
+    def consular_abonados(self, parking=None, lista=None):
         for a in parking.clientes:
             if isinstance(a, Abonado):
                 print("Tipo de abono: ", a.abono.tipo, ", Cobro total: ", a.abono.factura, "€")
 
-    def gestion_abonos(self, parking=None):
+    def gestion_abonos(self, parking=None, lista=None):
         menu_abono = 1
         cambio = 1
         while menu_abono != 0:
@@ -253,7 +239,7 @@ class ParkingService:
             else:
                 print("Saliendo...")
 
-    def caducidad_abonos(self, parking=None):
+    def caducidad_abonos(self, parking=None, lista=None):
         opcion = 1
         lista_caducidad = []
         while opcion != 0:
