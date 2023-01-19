@@ -41,8 +41,3 @@ class Cliente:
         pickle.dump(lista, clientes)
         clientes.close()
 
-    def cargar_clientes(self):
-        clientes = open('files/clientes.pckl', 'rb')
-        clientes_list = pickle.load(clientes)
-        clientes.close()
-        return clientes_list

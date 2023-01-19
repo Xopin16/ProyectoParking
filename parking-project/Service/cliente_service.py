@@ -5,21 +5,32 @@ from model.abonado import Abonado
 class ClienteService:
 
     def depositar_vehiculo(self, parking, cliente, lista_plazas):
+        it = 0
+        salir = False
         if cliente.vehiculo.tipo == 'Turismo':
-            for p in lista_plazas:
-                if p.estado == 'libre':
-                    cliente.plaza = p
+            while not salir:
+                it += 1
+                if lista_plazas[it].estado == 'libre':
+                    cliente.plaza = lista_plazas[it]
+                    salir = True
             cliente.plaza.estado = 'ocupada'
         elif cliente.vehiculo.tipo == 'Motocicleta':
-            for p in lista_plazas:
-                if p.estado == 'libre':
-                    cliente.plaza = p
+            while not salir:
+                if lista_plazas[it].estado == 'libre':
+                    cliente.plaza = lista_plazas[it]
+                    salir = True
             cliente.plaza.estado = 'ocupada'
         else:
-            for p in lista_plazas:
-                if p.estado == 'libre':
-                    cliente.plaza.estado = p
-            cliente.plaza = 'ocupada'
+            while not salir:
+                it += 1
+                if lista_plazas[it].estado == 'libre':
+                    cliente.plaza = lista_plazas[it]
+                    salir = True
+            cliente.plaza.estado = 'ocupada'
+            # for p in lista_plazas:
+            #     if p.estado == 'libre':
+            #         cliente.plaza.estado = p
+            # cliente.plaza = 'ocupada'
         cliente.plaza.fecha_deposito = datetime.now()
         ticket = parking.mostrar_ticket(cliente)
         parking.registro_facturas.append(ticket)

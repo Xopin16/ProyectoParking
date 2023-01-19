@@ -14,7 +14,7 @@ class Abonado(Cliente):
 
     def __str__(self):
         return '{} {} {} {} {} {} {} {} {}'.format(self.nombre, self.apellidos, self.num_tarjeta, self.email, self.dni,
-                                             self.abono, self.vehiculo, self.plaza.__str__(), self.pin)
+                                                   self.abono, self.vehiculo, self.plaza.__str__(), self.pin)
 
     @property
     def nombre(self):
@@ -64,3 +64,10 @@ class Abonado(Cliente):
     def abono(self, valor):
         self.__abono = valor
 
+    def mostrar_clientes(self):
+        print("\n*************************************")
+        print("Nombre: ", self.nombre, ", Apellidos: ", self.apellidos)
+        print("Tipo de abono: ", self.abono.tipo)
+        print("Pago total: ", self.abono.factura)
+        print("Válido hasta: ", self.abono.fecha_cancelacion)
+        print("*************************************\n")

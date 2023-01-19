@@ -42,11 +42,6 @@ class Plaza:
         pickle.dump(lista, plazas)
         plazas.close()
 
-    def cargar_plazas(self):
-        plazas = open('files/plazas.pckl', 'rb')
-        plazas_list = pickle.load(plazas)
-        plazas.close()
-        return plazas_list
 
 
 

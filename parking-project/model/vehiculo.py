@@ -15,9 +15,3 @@ class Vehiculo:
         vehiculos = open('files/vehiculos.pckl', 'wb')
         pickle.dump(lista, vehiculos)
         vehiculos.close()
-
-    def cargar_vehiculos(self):
-        vehiculos = open('files/vehiculos.pckl', 'rb')
-        vehiculos_list = pickle.load(vehiculos)
-        vehiculos.close()
-        return vehiculos_list

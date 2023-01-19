@@ -26,21 +26,9 @@ class AdminService:
             print("No hay resgistro de facturas entre esas fechas.")
 
     def consular_abonados(self, lista_clientes):
-        total_tipo = [0, 0, 0, 0]
-        tipo_abono = ['Mensual', 'Trimestral', 'Semestral', 'Anual']
-        factura_abonos = dict(zip(tipo_abono, total_tipo))
         for a in lista_clientes:
             if isinstance(a, Abonado):
-                if a.abono.tipo == 'Mensual':
-                    factura_abonos['Mensual'] += a.abono.factura
-                elif a.abono.tipo == 'Trimestral':
-                    factura_abonos['Trimestral'] += a.abono.factura
-                elif a.abono.tipo == 'Semestral':
-                    factura_abonos['Semestral'] += a.abono.factura
-                else:
-                    factura_abonos['Anual'] += a.abono.factura
-        for k, v in factura_abonos.items():
-            print("Tipo de abono: ", k, ", Cobro total: ", v, "€")
+                a.mostrar_clientes()
 
     def gestion_abonos(self, lista_clientes, lista_plazas, lista_abonos):
         menu_abono = 1
