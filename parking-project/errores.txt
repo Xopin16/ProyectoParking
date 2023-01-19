@@ -1,6 +1,6 @@
 1. Corregir forma de generar id_plaza. /HECHO
 2. Arreglar main de retirar vehiculo. /HECHO
-3. Arreglar while de main y gestion abono. /TODO
+3. Arreglar while gestion abono. /TODO
 4. Corregir facturas_registro de pickle /HECHO
 5. Agregar más vistas. /HECHO
 6. Corregir la clase plaza quitando las dos fechas. /HECHO
