@@ -48,27 +48,30 @@ while menu != 0:
     menu = int(input("Indica si eres cliente o administrador: "))
     if menu == 1:
         menu1 = -1
-        while menu1 != 0:
-            pk.mostrar_clientes(lista_clientes)
-            imprimir_menu_cliente()
-            menu1 = int(input("Indica desea hacer: "))
-            if menu1 == 1:
-                pk.mostrar_plazas_tipo(lista_clientes)
-                matricula = input("Introduzca matrícula: ")
-                tipo = input("Introduzca tipo de vehículo: ")
-                new_vehiculo = Vehiculo(matricula=matricula, tipo=tipo)
-                lista_vehiculos.append(new_vehiculo)
-                new_cliente = Cliente(vehiculo=new_vehiculo, plaza=None, pin=random.randint(100000, 999999))
-                lista_clientes.append(new_cliente)
-                ClienteService.depositar_vehiculo(pk, new_cliente, lista_plazas)
-            elif menu1 == 2:
-                ClienteService.retirar_vehiculo(lista_clientes, lista_cobros_cliente)
-            elif menu1 == 3:
-                ClienteService.depositar_abonados(lista_clientes)
-            elif menu1 == 4:
-                ClienteService.retirar_abonados(lista_clientes)
-            else:
-                print("Saliendo...")
+        try:
+            while menu1 != 0:
+                pk.mostrar_clientes(lista_clientes)
+                imprimir_menu_cliente()
+                menu1 = int(input("Indica desea hacer: "))
+                if menu1 == 1:
+                    pk.mostrar_plazas_tipo(lista_clientes)
+                    matricula = input("Introduzca matrícula: ")
+                    tipo = input("Introduzca tipo de vehículo: ")
+                    new_vehiculo = Vehiculo(matricula=matricula, tipo=tipo)
+                    lista_vehiculos.append(new_vehiculo)
+                    new_cliente = Cliente(vehiculo=new_vehiculo, plaza=None, pin=random.randint(100000, 999999))
+                    lista_clientes.append(new_cliente)
+                    ClienteService.depositar_vehiculo(pk, new_cliente, lista_plazas)
+                elif menu1 == 2:
+                    ClienteService.retirar_vehiculo(lista_clientes, lista_cobros_cliente)
+                elif menu1 == 3:
+                    ClienteService.depositar_abonados(lista_clientes)
+                elif menu1 == 4:
+                    ClienteService.retirar_abonados(lista_clientes)
+                else:
+                    print("Saliendo...")
+        except ValueError:
+            print("")
     elif menu == 2:
         menu2 = -1
         while menu2 != 0:
