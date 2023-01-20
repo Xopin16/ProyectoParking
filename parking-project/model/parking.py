@@ -4,15 +4,12 @@ from model.plaza import Plaza
 
 class Parking:
 
-    def __init__(self, plazas_totales, clientes=[], registro_facturas=[]):
+    def __init__(self, plazas_totales, registro_facturas=[]):
         self.__plazas_totales = plazas_totales
-        self.__clientes = clientes
-        self.__plazas = []
         self.__registro_facturas = registro_facturas
 
     def __str__(self):
-        return '{} {} {} {}'.format(self.plazas_totales, self.clientes, self.plazas,
-                                    self.registro_facturas)
+        return '{} {}'.format(self.plazas_totales, self.registro_facturas)
 
     @property
     def plazas_totales(self):
@@ -82,7 +79,7 @@ class Parking:
             else:
                 plazas['Movilidad reducida'] -= 1
         for k, v in plazas.items():
-            print("Tipo de plaza: ", k, "| Numero de plazas", v)
+            print("Tipo de plaza: ", k, "| Numero de plazas", round(v))
 
     def guardar_factura_cliente(self, lista):
         lista.append(self)

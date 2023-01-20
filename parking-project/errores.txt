@@ -1,17 +1,10 @@
-1. Corregir forma de generar id_plaza. /HECHO
-2. Arreglar main de retirar vehiculo. /HECHO
-3. Arreglar while gestion abono. /HECHO
-4. Corregir facturas_registro de pickle /HECHO
-5. Agregar más vistas. /HECHO
-6. Corregir la clase plaza quitando las dos fechas. /HECHO
-7. Dividir ParkingService en ZonaAdmin y ZonaCliente /HECHO
-8. Evitar chapuzas. /TODO
-9. Arreglar estado plaza. /HECHO
-10. Arreglar pisado de pickle. /HECHO
-11. Exepciones(valueError). /TODO
-12. Comprobación final. /TODO
-13. Modificar cobro. /HECHO
-14. Modificar consultar abonos. /HECHO
-15. Mirar bucle for de asignación plaza. /TODO
-16. Cargar datos por separado. /TODO
-17. Comprobar abono caducado. /TODO
+- Introducir tipo de vehiculo con un número /.TODO
+- No se cambia a abono ocupada. /TODO
+- Mensaje error ultimos 10 dias. /TODO
+COMPROBACIONES:
+    - No se puede asignar plazas si las de ese tipo están llenas. /TODO
+    - DNI Y MATRICULA NO PUEDEN SER REPETIDAS. /TODO
+
+RECORDATORIO:
+- PREGUNTAR A LUISMI POR LOS ATRIBUTOS POR DEFECTO EN NONE.
+- RECARGAR DATOS DE PRUEBA.

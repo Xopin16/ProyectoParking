@@ -1,5 +1,6 @@
 from datetime import datetime
 from model.abonado import Abonado
+from view.view import *
 
 
 class ClienteService:
@@ -7,88 +8,86 @@ class ClienteService:
     def depositar_vehiculo(self, parking, cliente, lista_plazas):
         it = 0
         salir = False
-        if cliente.vehiculo.tipo == 'Turismo':
-            while not salir:
-                it += 1
+        while not salir:
+            if cliente.vehiculo.tipo == 'Turismo':
                 if lista_plazas[it].estado == 'libre':
                     cliente.plaza = lista_plazas[it]
                     salir = True
-            cliente.plaza.estado = 'ocupada'
-        elif cliente.vehiculo.tipo == 'Motocicleta':
-            while not salir:
+            elif cliente.vehiculo.tipo == 'Motocicleta':
                 if lista_plazas[it].estado == 'libre':
                     cliente.plaza = lista_plazas[it]
                     salir = True
-            cliente.plaza.estado = 'ocupada'
-        else:
-            while not salir:
-                it += 1
+            else:
                 if lista_plazas[it].estado == 'libre':
                     cliente.plaza = lista_plazas[it]
                     salir = True
-            cliente.plaza.estado = 'ocupada'
-            # for p in lista_plazas:
-            #     if p.estado == 'libre':
-            #         cliente.plaza.estado = p
-            # cliente.plaza = 'ocupada'
+            it += 1
+        cliente.plaza.estado = 'ocupada'
         cliente.plaza.fecha_deposito = datetime.now()
         ticket = parking.mostrar_ticket(cliente)
         parking.registro_facturas.append(ticket)
 
-    def retirar_vehiculo(self, lista_clientes, lista_facturas):
-        cliente = 0
+    def retirar_vehiculo(self, lista_clientes, lista_facturas, cliente, lista_plazas):
+        retirado = False
         factura = dict()
-        matricula = input("Introduzca matricula: ")
-        id_plaza = int(input("Introduzca id de la plaza: "))
-        pin = int(input("Introduzca pin: "))
+        it = 0
+        salir = False
         for c in lista_clientes:
-            if pin == c.pin and id_plaza == c.plaza.id_plaza \
-                    and matricula == c.vehiculo.matricula:
+            if cliente.pin == c.pin and cliente.plaza.id_plaza == c.plaza.id_plaza \
+                    and cliente.vehiculo.matricula == c.vehiculo.matricula:
                 cliente = c
         if cliente in lista_clientes:
-            print("La tarifas son las siguientes:\nTurismos 0,12€ por minuto.\nMotocicletas 0,10€ por minuto."
-                  "\nMovilidad reducida 0,08€ por minuto.")
+            while not salir:
+                if lista_plazas[it].id_plaza == cliente.plaza.id_plaza:
+                    lista_plazas[it].estado = 'libre'
+                    salir=True
+                it += 1
+            imprimir_tarifas()
             if cliente.vehiculo.tipo == 'Turismo':
-                cliente.plaza.estado = 'libre'
                 lista_clientes.remove(cliente)
             elif cliente.vehiculo.tipo == 'Motocicleta':
-                cliente.plaza.estado = 'libre'
                 lista_clientes.remove(cliente)
             else:
-                cliente.plaza.estado = 'libre'
                 lista_clientes.remove(cliente)
             factura[self.cobrar(cliente)] = datetime.now()
-            for k, v in factura.items():
-                print("Total pagado: ", k, "€ , Fecha de salida: ", v)
+            imprimir_factura(factura)
             lista_facturas.append(factura)
+            retirado = True
+            return retirado
         else:
-            print("No existe ese cliente.")
+            return retirado
 
-    def depositar_abonados(self, lista):
-        abonado = 0
-        matricula = input("Introduzca matricula: ")
-        dni = input("Introduzca dni: ")
-        for c in lista:
+    def depositar_abonados(self, lista_clientes, abonado):
+        # CAMBIAR ESTADO PLAZAS AQUI
+        depositado = False
+        for c in lista_clientes:
             if isinstance(c, Abonado):
-                if matricula == c.vehiculo.matricula and dni == c.dni:
+                if abonado.vehiculo.matricula == c.vehiculo.matricula and abonado.dni == c.dni:
                     abonado = c
-        if abonado in lista:
-            abonado.plaza.estado = "abono ocupada"
+        if abonado in lista_clientes:
+            if datetime.now() < abonado.abono.fecha_cancelacion:
+                abonado.plaza.estado = "abono ocupada"
+                depositado = True
+                return depositado
+            else:
+                return depositado
         else:
-            print("No existe tal abonado.")
+            return depositado
 
-    def retirar_abonados(self, lista):
-        abonado = 0
-        matricula = input("Introduzca matricula: ")
-        id_plaza = int(input("Introduce el id_plaza: "))
-        pin = int(input("Introduce el pin: "))
-        for c in lista:
-            if matricula == c.vehiculo.matricula and id_plaza == c.plaza.id_plaza and pin == c.pin:
+    def retirar_abonados(self, lista_clientes, abonado):
+        # CAMBIAR ESTADO PLAZAS AQUI
+        retirado = False
+        for c in lista_clientes:
+            if abonado.vehiculo.matricula == c.vehiculo.matricula \
+                    and abonado.plaza.id_plaza == c.plaza.id_plaza \
+                    and abonado.pin == c.pin:
                 abonado = c
-        if abonado in lista:
+        if abonado in lista_clientes:
             abonado.plaza.estado = 'abono libre'
+            retirado = True
+            return retirado
         else:
-            print("No existe tal abonado.")
+            return retirado
 
     def cobrar(self, cliente):
         fecha_salida = datetime.now()

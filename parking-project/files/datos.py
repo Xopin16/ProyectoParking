@@ -75,31 +75,44 @@ def cargar_datos(lista_plazas, lista_vehiculos, lista_abonos, lista_clientes, li
     cobros = []
     for i in cobros:
         lista_cobros_cliente.append(i)
-    pk = Parking(plazas_totales=40, clientes=[c1, c2, c3, ab1, ab2], registro_facturas=[])
+    pk = Parking(plazas_totales=40, registro_facturas=[])
     parking = pk
 
 
-def cargar_datos_prueba(parking):
+def cargar_clientes():
     clientes = open('files/clientes.pckl', 'rb')
     lista_clientes = pickle.load(clientes)
     clientes.close()
+    return lista_clientes
 
+
+def cargar_vehiculos():
     vehiculos = open('files/vehiculos.pckl', 'rb')
     lista_vehiculos = pickle.load(vehiculos)
     vehiculos.close()
+    return lista_vehiculos
 
+
+def cargar_plazas():
     plazas = open('files/plazas.pckl', 'rb')
     lista_plazas = pickle.load(plazas)
     plazas.close()
+    return lista_plazas
 
+
+def cargar_abonos():
     abonos = open('files/abonos.pckl', 'rb')
     lista_abonos = pickle.load(abonos)
     abonos.close()
+    return lista_abonos
 
-    tickets_cliente = open('files/facturas_cliente.pckl', 'rb')
-    lista_tickets = pickle.load(tickets_cliente)
-    tickets_cliente.close()
+    # tickets_cliente = open('files/facturas_cliente.pckl', 'rb')
+    # lista_tickets = pickle.load(tickets_cliente)
+    # tickets_cliente.close()
 
+
+def cargar_facturas():
     cobros_cliente = open('files/facturas_cliente.pckl', 'rb')
     lista_cobros_cliente = pickle.load(cobros_cliente)
     cobros_cliente.close()
+    return lista_cobros_cliente
