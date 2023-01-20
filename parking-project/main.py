@@ -56,14 +56,18 @@ while menu != 0:
                 menu1 = -1
                 print("Por favor, indica un número válido.")
             if menu1 == 1:
+                tipo_vehiculo = ['Turismo', 'Motocicleta', 'Movilidad reducida']
                 pk.mostrar_plazas_tipo(lista_clientes)
                 matricula = input("Introduzca matrícula: ")
-                tipo = input("Introduzca tipo de vehículo: ")
-                new_vehiculo = Vehiculo(matricula=matricula, tipo=tipo)
-                lista_vehiculos.append(new_vehiculo)
-                new_cliente = Cliente(vehiculo=new_vehiculo, plaza=None, pin=random.randint(100000, 999999))
-                ClienteService.depositar_vehiculo(pk, new_cliente, lista_plazas)
-                lista_clientes.append(new_cliente)
+                tipo = asignar_tipo()
+                if tipo != 'No encontrado':
+                    new_vehiculo = Vehiculo(matricula=matricula, tipo=tipo)
+                    lista_vehiculos.append(new_vehiculo)
+                    new_cliente = Cliente(vehiculo=new_vehiculo, plaza=None, pin=random.randint(100000, 999999))
+                    ClienteService.depositar_vehiculo(pk, new_cliente, lista_plazas)
+                    lista_clientes.append(new_cliente)
+                else:
+                    print("Introduzca un vehículo valido.")
                 guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk,
                               lista_cobros_cliente)
             elif menu1 == 2:
@@ -76,7 +80,7 @@ while menu != 0:
                               lista_cobros_cliente)
             elif menu1 == 3:
                 abonado = comprobar_abonados_deposito()
-                if ClienteService.depositar_abonados(lista_clientes, abonado):
+                if ClienteService.depositar_abonados(lista_clientes, abonado, lista_plazas):
                     print("Se ha depositado su vehículo correctamente.")
                 else:
                     print("Lo sentimos, el abonado no existe, compruebe si su abono ha caducado.")
@@ -84,7 +88,7 @@ while menu != 0:
                               lista_cobros_cliente)
             elif menu1 == 4:
                 abonado = comprobar_abonados_retiro()
-                if ClienteService.retirar_abonados(lista_clientes, abonado):
+                if ClienteService.retirar_abonados(lista_clientes, abonado, lista_plazas):
                     print("Se he realizado el retiro correctamente.")
                 else:
                     print("Lo sentimos, el abonado no existe, compruebe si su abono ha caducado.")
@@ -128,10 +132,16 @@ while menu != 0:
                 while menu4 != 0:
                     menu4 = imprimir_menu_abono()
                     if menu4 == 1:
-                        abonado = crear_abonado_alta()
-                        opcion_abono = imprimir_tipos_abono()
-                        AdminService.alta_abonado(abonado, lista_clientes, lista_abonos, lista_plazas, opcion_abono)
-                        print("Se ha registrado el abonado.")
+                        abonado = crear_abonado_alta(lista_clientes)
+                        try:
+                            if abonado is not None:
+                                opcion_abono = imprimir_tipos_abono()
+                                AdminService.alta_abonado(abonado, lista_clientes, lista_abonos, lista_plazas, opcion_abono)
+                                print("Se ha registrado el abonado.")
+                            else:
+                                raise ValueError
+                        except ValueError:
+                            print("Datos incorrectos. ")
                         guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk,
                                       lista_cobros_cliente)
                     elif menu4 == 2:
@@ -179,8 +189,10 @@ while menu != 0:
                         except ValueError:
                             print("Por favor, indica un mes válido.")
                     elif menu3 == 2:
-                        AdminService.comprobar_abonos_proximos(lista_clientes)
-                        mostrar_abonos_proximos(lista_clientes)
+                        if AdminService.comprobar_abonos_proximos(lista_clientes):
+                            mostrar_abonos_proximos(lista_clientes)
+                        else:
+                            print("No caducan abonos en los proximos 10 días.")
                         guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk,
                                       lista_cobros_cliente)
                     else:

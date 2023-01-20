@@ -161,29 +161,58 @@ def imprimir_tipos_abono():
         print("Por favor, introduzca un número valido.")
 
 
-def crear_abonado_alta():
+def crear_abonado_alta(lista_clientes):
     nombre = input("Introduzca su nombre: ")
     apellidos = input("Introduzca su apellido: ")
     num_tarjeta = input("Introduzca su número de tarjeta: ")
     email = input("Introduzca su email: ")
     dni = input("Introduzca su dni: ")
-    v1 = Vehiculo(matricula="1111AB", tipo="Turismo")
-    ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
-                 dni=dni, abono=None, vehiculo=v1, plaza=None, pin=random.randint(100000, 999999))
-    return ab
+    matricula = input("Indique la matricula: ")
+    print("Seleccione su tipo de vehículo: ")
+    tipo = asignar_tipo()
+    if tipo == 'No encontrado':
+        return None
+    else:
+        if comprobar_dni(dni, lista_clientes) and comprobar_matricula(matricula, lista_clientes):
+            v1 = Vehiculo(matricula=matricula, tipo=tipo)
+            ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
+                         dni=dni, abono=None, vehiculo=v1, plaza=None, pin=random.randint(100000, 999999))
+            return ab
+        else:
+            return None
+
+
+def asignar_tipo():
+    tipo_vehiculo = ['Turismo', 'Motocicleta', 'Movilidad reducida', 'No encontrado']
+    try:
+        print("1. Turismo")
+        print("2. Motocicleta")
+        print("3. Movilidad reducida")
+        tipo = int(input("Indique el tipo de vehículo: "))
+        if tipo == 1:
+            return tipo_vehiculo[0]
+        elif tipo == 2:
+            return tipo_vehiculo[1]
+        else:
+            return tipo_vehiculo[2]
+    except ValueError:
+        return tipo_vehiculo[3]
 
 
 def comprobar_dni(dni, lista_clientes):
-    existe = False
+    existe = True
     for i in lista_clientes:
         if isinstance(i, Abonado):
             if dni == i.dni:
-                existe = True
+                existe = False
+
     return existe
-
-
-def generar_matricula(lista_clientes):
-    pass
+def comprobar_matricula(matricula, lista_clientes):
+    existe = True
+    for i in lista_clientes:
+        if matricula == i.vehiculo.matricula:
+            existe = False
+    return existe
 
 
 def imprimir_opcion_modificar():

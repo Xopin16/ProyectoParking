@@ -21,6 +21,7 @@ class ClienteService:
                 if lista_plazas[it].estado == 'libre':
                     cliente.plaza = lista_plazas[it]
                     salir = True
+            lista_plazas[it].fecha_deposito = datetime.now()
             it += 1
         cliente.plaza.estado = 'ocupada'
         cliente.plaza.fecha_deposito = datetime.now()
@@ -57,8 +58,9 @@ class ClienteService:
         else:
             return retirado
 
-    def depositar_abonados(self, lista_clientes, abonado):
-        # CAMBIAR ESTADO PLAZAS AQUI
+    def depositar_abonados(self, lista_clientes, abonado, lista_plazas):
+        it = 0
+        salir = False
         depositado = False
         for c in lista_clientes:
             if isinstance(c, Abonado):
@@ -66,7 +68,12 @@ class ClienteService:
                     abonado = c
         if abonado in lista_clientes:
             if datetime.now() < abonado.abono.fecha_cancelacion:
-                abonado.plaza.estado = "abono ocupada"
+                while not salir:
+                    if lista_plazas[it].id_plaza == abonado.plaza.id_plaza:
+                        lista_plazas[it].estado = 'abono ocupada'
+                        abonado.plaza.estado = "abono ocupada"
+                        salir = True
+                    it += 1
                 depositado = True
                 return depositado
             else:
@@ -74,8 +81,9 @@ class ClienteService:
         else:
             return depositado
 
-    def retirar_abonados(self, lista_clientes, abonado):
-        # CAMBIAR ESTADO PLAZAS AQUI
+    def retirar_abonados(self, lista_clientes, abonado, lista_plazas):
+        it = 0
+        salir = False
         retirado = False
         for c in lista_clientes:
             if abonado.vehiculo.matricula == c.vehiculo.matricula \
@@ -83,7 +91,13 @@ class ClienteService:
                     and abonado.pin == c.pin:
                 abonado = c
         if abonado in lista_clientes:
-            abonado.plaza.estado = 'abono libre'
+            while not salir:
+                if lista_plazas[it].id_plaza == abonado.plaza.id_plaza:
+                    lista_plazas[it].estado = 'abono libre'
+                    abonado.plaza.estado = "abono libre"
+                    salir = True
+                it += 1
+            # abonado.plaza.estado = 'abono libre'
             retirado = True
             return retirado
         else:
