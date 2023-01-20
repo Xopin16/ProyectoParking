@@ -43,10 +43,6 @@ class Parking:
     def registro_facturas(self, x):
         self.__registro_facturas = x
 
-    def mostrar_clientes(self, lista):
-        for c in lista:
-            print(c)
-
     def mostrar_plazas(self, lista):
         for p in lista:
             print("Id de la plaza: ", p.id_plaza, ", Estado: ", p.estado)

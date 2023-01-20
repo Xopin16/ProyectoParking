@@ -169,3 +169,6 @@ class AdminService:
         else:
             caducado = True
             return caducado
+
+    def mostrar_clientes_abonados(self, lista_clientes):
+        imprimir_clientes(lista_clientes)

@@ -41,7 +41,7 @@ class ClienteService:
             while not salir:
                 if lista_plazas[it].id_plaza == cliente.plaza.id_plaza:
                     lista_plazas[it].estado = 'libre'
-                    salir=True
+                    salir = True
                 it += 1
             imprimir_tarifas()
             if cliente.vehiculo.tipo == 'Turismo':
@@ -66,7 +66,7 @@ class ClienteService:
             if isinstance(c, Abonado):
                 if abonado.vehiculo.matricula == c.vehiculo.matricula and abonado.dni == c.dni:
                     abonado = c
-        if abonado in lista_clientes:
+        if abonado in lista_clientes and abonado.plaza.estado == 'abono libre':
             if datetime.now() < abonado.abono.fecha_cancelacion:
                 while not salir:
                     if lista_plazas[it].id_plaza == abonado.plaza.id_plaza:
@@ -90,14 +90,13 @@ class ClienteService:
                     and abonado.plaza.id_plaza == c.plaza.id_plaza \
                     and abonado.pin == c.pin:
                 abonado = c
-        if abonado in lista_clientes:
+        if abonado in lista_clientes and abonado.plaza.estado == 'abono ocupado':
             while not salir:
                 if lista_plazas[it].id_plaza == abonado.plaza.id_plaza:
                     lista_plazas[it].estado = 'abono libre'
                     abonado.plaza.estado = "abono libre"
                     salir = True
                 it += 1
-            # abonado.plaza.estado = 'abono libre'
             retirado = True
             return retirado
         else:
@@ -118,6 +117,7 @@ class ClienteService:
             minutos_diferencia = diferencia.total_seconds() / 60
             factura = minutos_diferencia * 0.12
         return round(factura, 2)
+
 
 def comprobar_abonado_modificado():
     dni = input("Indique su dni: ")

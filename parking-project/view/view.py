@@ -21,6 +21,7 @@ def imprimir_menu_admin():
     print("3. Consultar abonos")
     print("4. Gestionar abonos")
     print("5. Consultar caducidad de abonos")
+    print("6. Mostrar todos los clientes y abonados")
     print("0. Para salir")
 
 
@@ -41,37 +42,6 @@ def imprimir_tarifas():
     print("Turismos 0,12€ por minuto.")
     print("Motocicletas 0,10€ por minuto.")
     print("Movilidad reducida 0,08€ por minuto.")
-
-
-# def comprobar_cliente():
-#     matricula = input("Introduzca matricula: ")
-#     try:
-#         id_plaza = int(input("Introduzca id de la plaza: "))
-#         pin = int(input("Introduzca pin: "))
-#         return Cliente(vehiculo=Vehiculo(matricula=matricula),
-#                        plaza=Plaza(id_plaza=id_plaza), pin=pin)
-#     except ValueError:
-#         return Cliente(vehiculo=Vehiculo(matricula=matricula),
-#                        plaza=Plaza(id_plaza=0), pin=0)
-
-
-# def comprobar_abonados_deposito():
-#     matricula = input("Introduzca matricula: ")
-#     dni = input("Introduzca dni: ")
-#     return Abonado(vehiculo=Vehiculo(matricula=matricula),
-#                    dni=dni)
-
-
-# def comprobar_abonados_retiro():
-#     matricula = input("Introduzca matricula: ")
-#     try:
-#         id_plaza = int(input("Introduzca id de la plaza: "))
-#         pin = int(input("Introduzca pin: "))
-#         return Abonado(vehiculo=Vehiculo(matricula=matricula),
-#                        plaza=Plaza(id_plaza=id_plaza), pin=pin)
-#     except ValueError:
-#         return Abonado(vehiculo=Vehiculo(matricula=matricula),
-#                        plaza=Plaza(id_plaza=0), pin=0)
 
 
 def imprimir_factura(factura):
@@ -159,27 +129,6 @@ def imprimir_tipos_abono():
         print("Por favor, introduzca un número valido.")
 
 
-# def crear_abonado_alta(lista_clientes):
-#     nombre = input("Introduzca su nombre: ")
-#     apellidos = input("Introduzca su apellido: ")
-#     num_tarjeta = input("Introduzca su número de tarjeta: ")
-#     email = input("Introduzca su email: ")
-#     dni = input("Introduzca su dni: ")
-#     matricula = input("Indique la matricula: ")
-#     print("Seleccione su tipo de vehículo: ")
-#     tipo = asignar_tipo()
-#     if tipo == 'No encontrado':
-#         return None
-#     else:
-#         if comprobar_dni(dni, lista_clientes) and comprobar_matricula(matricula, lista_clientes):
-#             v1 = Vehiculo(matricula=matricula, tipo=tipo)
-#             ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
-#                          dni=dni, vehiculo=v1, pin=random.randint(100000, 999999))
-#             return ab
-#         else:
-#             return None
-
-
 def asignar_tipo():
     tipo_vehiculo = ['Turismo', 'Motocicleta', 'Movilidad reducida', 'No encontrado']
     try:
@@ -219,16 +168,37 @@ def imprimir_opcion_modificar():
     try:
         print("1.Modificar tipo de abono.")
         print("2.Modificar datos personales.")
+        print("0. Salir")
         cambio = int(input("¿Que desea modificar?: "))
         return cambio
     except ValueError:
         print("Por favor, introduzca un número valido.")
 
 
-# def comprobar_abonado_modificado():
-#     dni = input("Indique su dni: ")
-#     try:
-#         pin = int(input("Indique su pin: "))
-#         return Abonado(dni=dni, pin=pin)
-#     except ValueError:
-#         return Abonado(dni=dni, pin=0)
+def imprimir_clientes(lista_clientes):
+    clientes = []
+    abonados = []
+    for i in lista_clientes:
+        if isinstance(i, Abonado):
+            abonados.append(i)
+        else:
+            clientes.append(i)
+    print("\n")
+    print("***CLIENTES***")
+    for i in clientes:
+        print("**************************************")
+        print("Matricula: ", i.vehiculo.matricula)
+        print("Id plaza: ", i.plaza.id_plaza)
+        print("PIN: ", i.pin)
+    print("***ABONADOS***")
+    for i in abonados:
+        print("**************************************")
+
+        print("Nombre: ", i.nombre, " Apellidos: ", i.apellidos)
+        print("DNI: ", i.dni)
+        print("Email: ", i.email)
+        print("Matricula: ", i.vehiculo.matricula)
+        print("Id plaza: ", i.plaza.id_plaza)
+        print("PIN: ", i.pin)
+        print("Estado de la plaza: ", i.plaza.estado)
+    print("\n")

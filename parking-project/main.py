@@ -48,7 +48,7 @@ while menu != 0:
     if menu == 1:
         menu1 = -1
         while menu1 != 0:
-            pk.mostrar_clientes(lista_clientes)
+            pk.mostrar_plazas_tipo(lista_clientes)
             imprimir_menu_cliente()
             try:
                 menu1 = int(input("Indica desea hacer: "))
@@ -57,7 +57,6 @@ while menu != 0:
                 print("Por favor, indica un número válido.")
             if menu1 == 1:
                 tipo_vehiculo = ['Turismo', 'Motocicleta', 'Movilidad reducida']
-                pk.mostrar_plazas_tipo(lista_clientes)
                 matricula = input("Introduzca matrícula: ")
                 tipo = asignar_tipo()
                 if tipo != 'No encontrado':
@@ -83,7 +82,8 @@ while menu != 0:
                 if ClienteService.depositar_abonados(lista_clientes, abonado, lista_plazas):
                     print("Se ha depositado su vehículo correctamente.")
                 else:
-                    print("Lo sentimos, el abonado no existe, compruebe si su abono ha caducado.")
+                    print("No se ha podido depositar el vehiculo,  compruebe si su abono ha caducado o si ya "
+                          "ha depositado su vehiculo.")
                 guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk,
                               lista_cobros_cliente)
             elif menu1 == 4:
@@ -91,7 +91,8 @@ while menu != 0:
                 if ClienteService.retirar_abonados(lista_clientes, abonado, lista_plazas):
                     print("Se he realizado el retiro correctamente.")
                 else:
-                    print("Lo sentimos, el abonado no existe, compruebe si su abono ha caducado.")
+                    print("No se ha podido retirar el vehiculo,  compruebe si su abono ha caducado o si ya "
+                          "ha retirado su vehiculo.")
                 guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk,
                               lista_cobros_cliente)
             else:
@@ -141,7 +142,7 @@ while menu != 0:
                             else:
                                 raise ValueError
                         except ValueError:
-                            print("Datos incorrectos. ")
+                            print("Datos incorrectos, ya hemos registrado un abono con un dni o matricula idénticos. ")
                         guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk,
                                       lista_cobros_cliente)
                     elif menu4 == 2:
@@ -197,6 +198,8 @@ while menu != 0:
                                       lista_cobros_cliente)
                     else:
                         print("Saliendo...")
+            elif menu2 == 6:
+                AdminService.mostrar_clientes_abonados(lista_clientes)
             else:
                 print("Saliendo...")
     else:
