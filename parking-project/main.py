@@ -22,14 +22,6 @@ lista_cobros_cliente = cargar_facturas()
 pk.rellenar_plazas(lista_plazas)
 pk.plazas_disponibles = pk.rellenar_plazas_tipo(lista_clientes)
 
-# lista_plazas = []
-# lista_vehiculos = []
-# lista_abonos = []
-# lista_clientes = []
-# lista_cobros_cliente = []
-# cargar_datos(lista_plazas, lista_vehiculos, lista_abonos, lista_clientes, lista_cobros_cliente, pk)
-# guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, pk, lista_cobros_cliente)
-
 
 menu_principal = -1
 menu_cliente = -1
@@ -41,7 +33,6 @@ opcion_modificar = -1
 opcion_datos = -1
 opcion_tipo = -1
 
-# print(pk.plazas_disponibles['Turismo'])
 
 while menu_principal != 0:
     print("1. Cliente")
