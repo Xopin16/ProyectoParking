@@ -8,21 +8,21 @@ from model.vehiculo import Vehiculo
 
 
 def imprimir_menu_cliente():
-    print("1. Depositar vehiculo")
-    print("2. Retirar vehiculo")
-    print("3. Depositar abonados")
+    print("1. Depositar vehiculo.")
+    print("2. Retirar vehiculo.")
+    print("3. Depositar abonados.")
     print("4. Retirar abonados")
-    print("0. Para salir")
+    print("0. Para salir.")
 
 
 def imprimir_menu_admin():
-    print("1. Consultar estado parking")
-    print("2. Mostrar registro de facturas entre dos fechas")
-    print("3. Consultar abonos")
-    print("4. Gestionar abonos")
-    print("5. Consultar caducidad de abonos")
-    print("6. Mostrar todos los clientes y abonados")
-    print("0. Para salir")
+    print("1. Consultar estado parking.")
+    print("2. Mostrar registro de facturas entre dos fechas.")
+    print("3. Consultar abonos.")
+    print("4. Gestionar abonos.")
+    print("5. Consultar caducidad de abonos.")
+    print("6. Mostrar todos los clientes y abonados.")
+    print("0. Para salir.")
 
 
 def imprimir_datos_modificar():
@@ -140,27 +140,28 @@ def asignar_tipo():
             return tipo_vehiculo[0]
         elif tipo == 2:
             return tipo_vehiculo[1]
-        else:
+        elif tipo == 3:
             return tipo_vehiculo[2]
+        else:
+            return tipo_vehiculo[3]
     except ValueError:
         return tipo_vehiculo[3]
 
 
 def comprobar_dni(dni, lista_clientes):
-    existe = True
+    existe = False
     for i in lista_clientes:
         if isinstance(i, Abonado):
-            if dni == i.dni:
-                existe = False
-
+            if dni.upper() == i.dni.upper():
+                existe = True
     return existe
 
 
 def comprobar_matricula(matricula, lista_clientes):
-    existe = True
+    existe = False
     for i in lista_clientes:
-        if matricula == i.vehiculo.matricula:
-            existe = False
+        if matricula.upper() == i.vehiculo.matricula.upper():
+            existe = True
     return existe
 
 
@@ -168,7 +169,7 @@ def imprimir_opcion_modificar():
     try:
         print("1.Modificar tipo de abono.")
         print("2.Modificar datos personales.")
-        print("0. Salir")
+        print("0.Salir.")
         cambio = int(input("¿Que desea modificar?: "))
         return cambio
     except ValueError:
@@ -188,8 +189,11 @@ def imprimir_clientes(lista_clientes):
     for i in clientes:
         print("**************************************")
         print("Matricula: ", i.vehiculo.matricula)
+        print("Tipo de vehículo: ", i.vehiculo.tipo)
         print("Id plaza: ", i.plaza.id_plaza)
         print("PIN: ", i.pin)
+        print("Estado de la plaza: ", i.plaza.estado)
+    print("\n")
     print("***ABONADOS***")
     for i in abonados:
         print("**************************************")
@@ -198,6 +202,7 @@ def imprimir_clientes(lista_clientes):
         print("DNI: ", i.dni)
         print("Email: ", i.email)
         print("Matricula: ", i.vehiculo.matricula)
+        print("Tipo de vehículo: ", i.vehiculo.tipo)
         print("Id plaza: ", i.plaza.id_plaza)
         print("PIN: ", i.pin)
         print("Estado de la plaza: ", i.plaza.estado)

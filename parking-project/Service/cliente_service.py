@@ -10,16 +10,22 @@ class ClienteService:
         salir = False
         while not salir:
             if cliente.vehiculo.tipo == 'Turismo':
-                if lista_plazas[it].estado == 'libre':
+                if lista_plazas[it].estado == 'libre' \
+                        and parking.plazas_disponibles['Turismo'] > 0:
                     cliente.plaza = lista_plazas[it]
+                    parking.plazas_disponibles['Turismo'] -= 1
                     salir = True
-            elif cliente.vehiculo.tipo == 'Motocicleta':
+            elif cliente.vehiculo.tipo == 'Motocicleta'\
+                    and parking.plazas_disponibles['Motocicleta'] > 0:
                 if lista_plazas[it].estado == 'libre':
                     cliente.plaza = lista_plazas[it]
+                    parking.plazas_disponibles['Motocicleta'] -= 1
                     salir = True
             else:
-                if lista_plazas[it].estado == 'libre':
+                if lista_plazas[it].estado == 'libre'\
+                        and parking.plazas_disponibles['Movilidad reducida'] > 0:
                     cliente.plaza = lista_plazas[it]
+                    parking.plazas_disponibles['Movilidad reducida'] -= 1
                     salir = True
             lista_plazas[it].fecha_deposito = datetime.now()
             it += 1
@@ -28,28 +34,29 @@ class ClienteService:
         ticket = parking.mostrar_ticket(cliente)
         parking.registro_facturas.append(ticket)
 
-    def retirar_vehiculo(self, lista_clientes, lista_facturas, cliente, lista_plazas):
+    def retirar_vehiculo(self, parking, lista_clientes, lista_facturas, cliente, lista_plazas):
         retirado = False
         factura = dict()
         it = 0
         salir = False
         for c in lista_clientes:
-            if cliente.pin == c.pin and cliente.plaza.id_plaza == c.plaza.id_plaza \
-                    and cliente.vehiculo.matricula == c.vehiculo.matricula:
-                cliente = c
+            if not isinstance(c, Abonado):
+                if cliente.pin == c.pin and cliente.plaza.id_plaza == c.plaza.id_plaza \
+                        and cliente.vehiculo.matricula.upper() == c.vehiculo.matricula.upper():
+                    cliente = c
         if cliente in lista_clientes:
             while not salir:
                 if lista_plazas[it].id_plaza == cliente.plaza.id_plaza:
                     lista_plazas[it].estado = 'libre'
                     salir = True
                 it += 1
-            imprimir_tarifas()
             if cliente.vehiculo.tipo == 'Turismo':
-                lista_clientes.remove(cliente)
+                parking.plazas_disponibles['Turismo'] += 1
             elif cliente.vehiculo.tipo == 'Motocicleta':
-                lista_clientes.remove(cliente)
+                parking.plazas_disponibles['Motocicleta'] += 1
             else:
-                lista_clientes.remove(cliente)
+                parking.plazas_disponibles['Movilidad reducida'] += 1
+            lista_clientes.remove(cliente)
             factura[self.cobrar(cliente)] = datetime.now()
             imprimir_factura(factura)
             lista_facturas.append(factura)
@@ -64,7 +71,8 @@ class ClienteService:
         depositado = False
         for c in lista_clientes:
             if isinstance(c, Abonado):
-                if abonado.vehiculo.matricula == c.vehiculo.matricula and abonado.dni == c.dni:
+                if abonado.vehiculo.matricula.upper() == c.vehiculo.matricula.upper() \
+                        and abonado.dni.upper() == c.dni.upper():
                     abonado = c
         if abonado in lista_clientes and abonado.plaza.estado == 'abono libre':
             if datetime.now() < abonado.abono.fecha_cancelacion:
@@ -86,11 +94,11 @@ class ClienteService:
         salir = False
         retirado = False
         for c in lista_clientes:
-            if abonado.vehiculo.matricula == c.vehiculo.matricula \
+            if abonado.vehiculo.matricula.upper() == c.vehiculo.matricula.upper() \
                     and abonado.plaza.id_plaza == c.plaza.id_plaza \
                     and abonado.pin == c.pin:
                 abonado = c
-        if abonado in lista_clientes and abonado.plaza.estado == 'abono ocupado':
+        if abonado in lista_clientes and abonado.plaza.estado == 'abono ocupada':
             while not salir:
                 if lista_plazas[it].id_plaza == abonado.plaza.id_plaza:
                     lista_plazas[it].estado = 'abono libre'
@@ -117,12 +125,3 @@ class ClienteService:
             minutos_diferencia = diferencia.total_seconds() / 60
             factura = minutos_diferencia * 0.12
         return round(factura, 2)
-
-
-def comprobar_abonado_modificado():
-    dni = input("Indique su dni: ")
-    try:
-        pin = int(input("Indique su pin: "))
-        return Abonado(dni=dni, pin=pin)
-    except ValueError:
-        return Abonado(dni=dni, pin=0)

@@ -54,8 +54,8 @@ def cargar_datos(lista_plazas, lista_vehiculos, lista_abonos, lista_clientes, li
     for i in vehiculos:
         lista_vehiculos.append(i)
 
-    abono1 = Abono(tipo='Mensual', factura=25, fecha_activacion=datetime(2023, 1, 1, 10, 15, 00, 00000),
-                   fecha_cancelacion=datetime(2023, 2, 1, 10, 15, 00, 00000))
+    abono1 = Abono(tipo='Mensual', factura=25, fecha_activacion=datetime(2022, 12, 25, 10, 15, 00, 00000),
+                   fecha_cancelacion=datetime(2023, 1, 25, 10, 15, 00, 00000))
     abono2 = Abono(tipo='Anual', factura=200, fecha_activacion=datetime(2023, 1, 1, 10, 15, 00, 00000),
                    fecha_cancelacion=datetime(2024, 1, 1, 10, 15, 00, 00000))
     abonos = [abono1, abono2]
@@ -124,7 +124,7 @@ def comprobar_abonado_modificado():
         return Abonado(dni=dni, pin=0)
 
 
-def comprobar_cliente():
+def comprobar_cliente(lista_clientes):
     matricula = input("Introduzca matricula: ")
     try:
         id_plaza = int(input("Introduzca id de la plaza: "))
@@ -157,16 +157,13 @@ def crear_abonado_alta(lista_clientes):
     matricula = input("Indique la matricula: ")
     print("Seleccione su tipo de vehículo: ")
     tipo = asignar_tipo()
-    if tipo == 'No encontrado':
-        return None
+    if not comprobar_dni(dni, lista_clientes) and not comprobar_matricula(matricula, lista_clientes):
+        v1 = Vehiculo(matricula=matricula, tipo=tipo)
+        ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
+                     dni=dni, vehiculo=v1, pin=random.randint(100000, 999999))
+        return ab
     else:
-        if comprobar_dni(dni, lista_clientes) and comprobar_matricula(matricula, lista_clientes):
-            v1 = Vehiculo(matricula=matricula, tipo=tipo)
-            ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
-                         dni=dni, vehiculo=v1, pin=random.randint(100000, 999999))
-            return ab
-        else:
-            return None
+        return None
 
 
 def comprobar_abonados_deposito():
