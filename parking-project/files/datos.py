@@ -6,6 +6,7 @@ from model.cliente import Cliente
 from model.parking import Parking
 from model.plaza import Plaza
 from model.vehiculo import Vehiculo
+from view.view import *
 
 
 def guardar_datos(lista_clientes, lista_vehiculos, lista_plazas, lista_abonos, parking, lista_cobros_cliente):
@@ -106,13 +107,70 @@ def cargar_abonos():
     abonos.close()
     return lista_abonos
 
-    # tickets_cliente = open('files/facturas_cliente.pckl', 'rb')
-    # lista_tickets = pickle.load(tickets_cliente)
-    # tickets_cliente.close()
-
 
 def cargar_facturas():
     cobros_cliente = open('files/facturas_cliente.pckl', 'rb')
     lista_cobros_cliente = pickle.load(cobros_cliente)
     cobros_cliente.close()
     return lista_cobros_cliente
+
+
+def comprobar_abonado_modificado():
+    dni = input("Indique su dni: ")
+    try:
+        pin = int(input("Indique su pin: "))
+        return Abonado(dni=dni, pin=pin)
+    except ValueError:
+        return Abonado(dni=dni, pin=0)
+
+
+def comprobar_cliente():
+    matricula = input("Introduzca matricula: ")
+    try:
+        id_plaza = int(input("Introduzca id de la plaza: "))
+        pin = int(input("Introduzca pin: "))
+        return Cliente(vehiculo=Vehiculo(matricula=matricula),
+                       plaza=Plaza(id_plaza=id_plaza), pin=pin)
+    except ValueError:
+        return Cliente(vehiculo=Vehiculo(matricula=matricula),
+                       plaza=Plaza(id_plaza=0), pin=0)
+
+
+def comprobar_abonados_retiro():
+    matricula = input("Introduzca matricula: ")
+    try:
+        id_plaza = int(input("Introduzca id de la plaza: "))
+        pin = int(input("Introduzca pin: "))
+        return Abonado(vehiculo=Vehiculo(matricula=matricula),
+                       plaza=Plaza(id_plaza=id_plaza), pin=pin)
+    except ValueError:
+        return Abonado(vehiculo=Vehiculo(matricula=matricula),
+                       plaza=Plaza(id_plaza=0), pin=0)
+
+
+def crear_abonado_alta(lista_clientes):
+    nombre = input("Introduzca su nombre: ")
+    apellidos = input("Introduzca su apellido: ")
+    num_tarjeta = input("Introduzca su número de tarjeta: ")
+    email = input("Introduzca su email: ")
+    dni = input("Introduzca su dni: ")
+    matricula = input("Indique la matricula: ")
+    print("Seleccione su tipo de vehículo: ")
+    tipo = asignar_tipo()
+    if tipo == 'No encontrado':
+        return None
+    else:
+        if comprobar_dni(dni, lista_clientes) and comprobar_matricula(matricula, lista_clientes):
+            v1 = Vehiculo(matricula=matricula, tipo=tipo)
+            ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
+                         dni=dni, vehiculo=v1, pin=random.randint(100000, 999999))
+            return ab
+        else:
+            return None
+
+
+def comprobar_abonados_deposito():
+    matricula = input("Introduzca matricula: ")
+    dni = input("Introduzca dni: ")
+    return Abonado(vehiculo=Vehiculo(matricula=matricula),
+                   dni=dni)

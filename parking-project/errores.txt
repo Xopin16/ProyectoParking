@@ -1,12 +1,11 @@
 - Introducir tipo de vehiculo con un número. /HECHO
 - No se cambia a abono ocupada. /HECHO
 - Mensaje error ultimos 10 dias. /HECHO
+- METER METODOS DE CREAR EN DATOS.PY /TODO
+-
 COMPROBACIONES:
-    - No se puede asignar plazas si las de ese tipo están llenas. /TODO
-        - DEPOSITAR, ALTA ABONO, DEPOSITAR ABONADO
-    - DNI Y MATRICULA NO PUEDEN SER REPETIDAS. /HECHO
+    - No se puede asignar plazas si las de ese tipo están llenas. /HECHO
+    - DNI Y MATRICULA NO PUEDEN SER REPETIDAS. /TODO
 
 RECORDATORIO:
-- PREGUNTAR A LUISMI POR LOS ATRIBUTOS POR DEFECTO EN NONE.
-- RECARGAR DATOS DE PRUEBA.
 - .upper DNI

@@ -3,7 +3,7 @@ import pickle
 
 class Plaza:
 
-    def __init__(self, id_plaza, estado, fecha_deposito=None):
+    def __init__(self, id_plaza=None, estado=None, fecha_deposito=None):
         self.__id_plaza = id_plaza
         self.__estado = estado
         self.__fecha_deposito = fecha_deposito

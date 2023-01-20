@@ -3,7 +3,7 @@ import pickle
 
 class Vehiculo:
 
-    def __init__(self, matricula, tipo):
+    def __init__(self, matricula=None, tipo=None):
         self.matricula = matricula
         self.tipo = tipo
 

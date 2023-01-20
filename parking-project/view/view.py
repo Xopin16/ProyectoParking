@@ -43,37 +43,35 @@ def imprimir_tarifas():
     print("Movilidad reducida 0,08€ por minuto.")
 
 
-def comprobar_cliente():
-    matricula = input("Introduzca matricula: ")
-    try:
-        id_plaza = int(input("Introduzca id de la plaza: "))
-        pin = int(input("Introduzca pin: "))
-        return Cliente(vehiculo=Vehiculo(matricula=matricula, tipo=None),
-                       plaza=Plaza(id_plaza=id_plaza, estado=None), pin=pin)
-    except ValueError:
-        return Cliente(vehiculo=Vehiculo(matricula=matricula, tipo=None),
-                       plaza=Plaza(id_plaza=0, estado=None), pin=0)
+# def comprobar_cliente():
+#     matricula = input("Introduzca matricula: ")
+#     try:
+#         id_plaza = int(input("Introduzca id de la plaza: "))
+#         pin = int(input("Introduzca pin: "))
+#         return Cliente(vehiculo=Vehiculo(matricula=matricula),
+#                        plaza=Plaza(id_plaza=id_plaza), pin=pin)
+#     except ValueError:
+#         return Cliente(vehiculo=Vehiculo(matricula=matricula),
+#                        plaza=Plaza(id_plaza=0), pin=0)
 
 
-def comprobar_abonados_deposito():
-    matricula = input("Introduzca matricula: ")
-    dni = input("Introduzca dni: ")
-    return Abonado(vehiculo=Vehiculo(matricula=matricula, tipo=None), abono=None, plaza=None,
-                   dni=dni, num_tarjeta=None, email=None, pin=None, nombre=None, apellidos=None)
+# def comprobar_abonados_deposito():
+#     matricula = input("Introduzca matricula: ")
+#     dni = input("Introduzca dni: ")
+#     return Abonado(vehiculo=Vehiculo(matricula=matricula),
+#                    dni=dni)
 
 
-def comprobar_abonados_retiro():
-    matricula = input("Introduzca matricula: ")
-    try:
-        id_plaza = int(input("Introduzca id de la plaza: "))
-        pin = int(input("Introduzca pin: "))
-        return Abonado(vehiculo=Vehiculo(matricula=matricula, tipo=None), abono=None,
-                       plaza=Plaza(id_plaza=id_plaza, estado=None),
-                       dni=None, num_tarjeta=None, email=None, pin=pin, nombre=None, apellidos=None)
-    except ValueError:
-        return Abonado(vehiculo=Vehiculo(matricula=matricula, tipo=None), abono=None,
-                       plaza=Plaza(id_plaza=0, estado=None),
-                       dni=None, num_tarjeta=None, email=None, pin=0, nombre=None, apellidos=None)
+# def comprobar_abonados_retiro():
+#     matricula = input("Introduzca matricula: ")
+#     try:
+#         id_plaza = int(input("Introduzca id de la plaza: "))
+#         pin = int(input("Introduzca pin: "))
+#         return Abonado(vehiculo=Vehiculo(matricula=matricula),
+#                        plaza=Plaza(id_plaza=id_plaza), pin=pin)
+#     except ValueError:
+#         return Abonado(vehiculo=Vehiculo(matricula=matricula),
+#                        plaza=Plaza(id_plaza=0), pin=0)
 
 
 def imprimir_factura(factura):
@@ -161,25 +159,25 @@ def imprimir_tipos_abono():
         print("Por favor, introduzca un número valido.")
 
 
-def crear_abonado_alta(lista_clientes):
-    nombre = input("Introduzca su nombre: ")
-    apellidos = input("Introduzca su apellido: ")
-    num_tarjeta = input("Introduzca su número de tarjeta: ")
-    email = input("Introduzca su email: ")
-    dni = input("Introduzca su dni: ")
-    matricula = input("Indique la matricula: ")
-    print("Seleccione su tipo de vehículo: ")
-    tipo = asignar_tipo()
-    if tipo == 'No encontrado':
-        return None
-    else:
-        if comprobar_dni(dni, lista_clientes) and comprobar_matricula(matricula, lista_clientes):
-            v1 = Vehiculo(matricula=matricula, tipo=tipo)
-            ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
-                         dni=dni, abono=None, vehiculo=v1, plaza=None, pin=random.randint(100000, 999999))
-            return ab
-        else:
-            return None
+# def crear_abonado_alta(lista_clientes):
+#     nombre = input("Introduzca su nombre: ")
+#     apellidos = input("Introduzca su apellido: ")
+#     num_tarjeta = input("Introduzca su número de tarjeta: ")
+#     email = input("Introduzca su email: ")
+#     dni = input("Introduzca su dni: ")
+#     matricula = input("Indique la matricula: ")
+#     print("Seleccione su tipo de vehículo: ")
+#     tipo = asignar_tipo()
+#     if tipo == 'No encontrado':
+#         return None
+#     else:
+#         if comprobar_dni(dni, lista_clientes) and comprobar_matricula(matricula, lista_clientes):
+#             v1 = Vehiculo(matricula=matricula, tipo=tipo)
+#             ab = Abonado(nombre=nombre, apellidos=apellidos, num_tarjeta=num_tarjeta, email=email,
+#                          dni=dni, vehiculo=v1, pin=random.randint(100000, 999999))
+#             return ab
+#         else:
+#             return None
 
 
 def asignar_tipo():
@@ -207,6 +205,8 @@ def comprobar_dni(dni, lista_clientes):
                 existe = False
 
     return existe
+
+
 def comprobar_matricula(matricula, lista_clientes):
     existe = True
     for i in lista_clientes:
@@ -225,12 +225,10 @@ def imprimir_opcion_modificar():
         print("Por favor, introduzca un número valido.")
 
 
-def comprobar_abonado_modificado():
-    dni = input("Indique su dni: ")
-    try:
-        pin = int(input("Indique su pin: "))
-        return Abonado(vehiculo=Vehiculo(matricula=None, tipo=None), abono=None, plaza=None,
-                       dni=dni, num_tarjeta=None, email=None, pin=pin, nombre=None, apellidos=None)
-    except ValueError:
-        return Abonado(vehiculo=Vehiculo(matricula=None, tipo=None), abono=None, plaza=None,
-                       dni=dni, num_tarjeta=None, email=None, pin=0, nombre=None, apellidos=None)
+# def comprobar_abonado_modificado():
+#     dni = input("Indique su dni: ")
+#     try:
+#         pin = int(input("Indique su pin: "))
+#         return Abonado(dni=dni, pin=pin)
+#     except ValueError:
+#         return Abonado(dni=dni, pin=0)

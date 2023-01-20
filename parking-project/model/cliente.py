@@ -3,7 +3,7 @@ import pickle
 
 class Cliente:
 
-    def __init__(self, vehiculo, plaza, pin):
+    def __init__(self, vehiculo=None, plaza=None, pin=None):
         self.__vehiculo = vehiculo
         self.__plaza = plaza
         self.__pin = pin

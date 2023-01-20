@@ -4,7 +4,7 @@ import pickle
 
 class Abono:
 
-    def __init__(self, tipo, factura, fecha_activacion=datetime, fecha_cancelacion=datetime):
+    def __init__(self, tipo=None, factura=None, fecha_activacion=None, fecha_cancelacion=None):
         self.__tipo = tipo
         self.__factura = factura
         self.__fecha_activacion = fecha_activacion

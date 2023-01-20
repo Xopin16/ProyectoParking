@@ -3,7 +3,8 @@ from model.cliente import Cliente
 
 class Abonado(Cliente):
 
-    def __init__(self, nombre, apellidos, num_tarjeta, email, dni, abono, vehiculo, plaza, pin):
+    def __init__(self, nombre=None, apellidos=None, num_tarjeta=None, email=None, dni=None, abono=None,
+                 vehiculo=None, plaza=None, pin=None):
         super().__init__(vehiculo, plaza, pin)
         self.__nombre = nombre
         self.__apellidos = apellidos

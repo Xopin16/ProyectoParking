@@ -118,3 +118,11 @@ class ClienteService:
             minutos_diferencia = diferencia.total_seconds() / 60
             factura = minutos_diferencia * 0.12
         return round(factura, 2)
+
+def comprobar_abonado_modificado():
+    dni = input("Indique su dni: ")
+    try:
+        pin = int(input("Indique su pin: "))
+        return Abonado(dni=dni, pin=pin)
+    except ValueError:
+        return Abonado(dni=dni, pin=0)
